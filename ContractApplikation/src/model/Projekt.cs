@@ -14,7 +14,7 @@ namespace ContractApplikation.Src.Model
 
         public String EndDatum { get; private set; }
 
-        public String AnsprechPartnerID { get; private set; }
+        public String AnsprechpartnerID { get; private set; }
 
         public String AnzahlStunden { get; private set; }
 
@@ -41,7 +41,7 @@ namespace ContractApplikation.Src.Model
             this.Projektnummer       = dataReader.GetValue(1).ToString();
             this.StartDatum          = dataReader.GetValue(2).ToString();
             this.EndDatum            = dataReader.GetValue(3).ToString();
-            this.AnsprechPartnerID   = dataReader.GetValue(4).ToString();
+            this.AnsprechpartnerID   = dataReader.GetValue(4).ToString();
             this.AnzahlStunden       = dataReader.GetValue(5).ToString();
             this.Verrechnungssatz    = dataReader.GetValue(6).ToString();
             this.ProjektTitel        = dataReader.GetValue(7).ToString();

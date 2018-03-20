@@ -10,13 +10,12 @@ namespace ContractApplikation.Src.Helper
         {
             if (string.IsNullOrEmpty(s))
                 return string.Empty;
-            s = s.ToLower();
             char[] a = s.ToCharArray();
             a[0] = char.ToUpper(a[0]);
             return new string(a);
         }
 
-        public static TextBox generateTextBoxWithNameAndValue(string name, string value)
+        public static TextBox GenerateTextBoxWithNameAndValue(string name, string value)
         {
             TextBox newTextBox = new TextBox();
             newTextBox.Name = name;

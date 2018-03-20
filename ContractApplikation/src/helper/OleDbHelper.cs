@@ -60,7 +60,7 @@ namespace ContractApplikation.Src.Helper
                 cmd.Parameters.Add("@Projektnummer", OleDbType.VarChar).Value       = project.Projektnummer;
                 cmd.Parameters.Add("@StartDatum", OleDbType.VarChar).Value          = project.StartDatum;
                 cmd.Parameters.Add("@EndDatum", OleDbType.VarChar).Value            = project.EndDatum;
-                cmd.Parameters.Add("@AnsprechpartnerID", OleDbType.VarChar).Value   = project.AnsprechPartnerID;
+                cmd.Parameters.Add("@AnsprechpartnerID", OleDbType.VarChar).Value   = project.AnsprechpartnerID;
                 cmd.Parameters.Add("@AnzahlStunden", OleDbType.VarChar).Value       = project.AnzahlStunden;
                 cmd.Parameters.Add("@Verrechnungssatz", OleDbType.VarChar).Value    = project.Verrechnungssatz;
                 cmd.Parameters.Add("@ProjektTitel", OleDbType.VarChar).Value        = project.ProjektTitel;

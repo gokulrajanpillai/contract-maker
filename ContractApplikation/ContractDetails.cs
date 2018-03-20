@@ -121,8 +121,9 @@ namespace ContractApplikation
         private Projekt GenerateProjectWithControl(Control.ControlCollection controlsForProjectTabPage)
         {
             List<TextBox> textboxes = ListOfTextBoxFromControlCollection(controlsForProjectTabPage);
-            textboxes.Add(Utilities.generateTextBoxWithNameAndValue("startDatum",   startDatumDtPikr.Value.ToString()));
-            textboxes.Add(Utilities.generateTextBoxWithNameAndValue("endDatum",     endDatumDtPikr.Value.ToString()));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("startDatum",   startDatumDtPikr.Value.ToString()));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("endDatum", endDatumDtPikr.Value.ToString()));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("ansprechpartnerID", ansprechpartnerComboBox.SelectedIndex.ToString()));
             return new Projekt(textboxes);
         }
 
@@ -135,7 +136,7 @@ namespace ContractApplikation
             {
                 MessageBox.Show("Geben Sie den " + emptyItem.Name + " ein");
             }
-            else if (!String.IsNullOrWhiteSpace(startDatumDtPikr.Text) && !String.IsNullOrWhiteSpace(endDatumDtPikr.Text))
+            else if (!AreProjectDatesValid())
             {
                 MessageBox.Show("Wähle ein Geschlecht aus");
             }
@@ -145,6 +146,26 @@ namespace ContractApplikation
             }
 
             return false;
+        }
+
+        private bool AreProjectDatesValid()
+        {
+            if (startDatumDtPikr.Text == null || endDatumDtPikr.Text == null)
+            {
+                return false;
+            }
+            else if (startDatumDtPikr.Value > endDatumDtPikr.Value)
+            {
+                MessageBox.Show("Startdatum sollte nach Enddatum sein");
+                return false;
+            }
+            else if (startDatumDtPikr.Value == endDatumDtPikr.Value)
+            {
+                MessageBox.Show("Startdatum und Enddatum können nicht identisch sein");
+                return false;
+            }
+
+            return true;
         }
 
         private void ContractDetails_Load(object sender, EventArgs e)
@@ -195,7 +216,7 @@ namespace ContractApplikation
             ansprechpartnerComboBox.Items.Clear();
             foreach (Ansprechpartner cust in model.CustomerList)
             {
-                ansprechpartnerComboBox.Items.Add(new CustomComboBoxItem(cust.Name, cust));
+                ansprechpartnerComboBox.Items.Add(new CustomComboBoxItem(cust.Name, model.CustomerList.IndexOf(cust)));
             }
         }
     }

@@ -45,14 +45,13 @@ namespace ContractApplikation.Src.Model
                 return Utilities.FirstLetterToUpperCase(Bezeichnung) + ". " + Utilities.FirstLetterToUpperCase(Vorname) + " " + Utilities.FirstLetterToUpperCase(Nachname);
             }
         }
-
         public Ansprechpartner(List<TextBox> listOfTextboxes, Honorifics bezeichnung)
         {
             this.Bezeichnung = bezeichnung.ToString();
 
             foreach (TextBox textBox in listOfTextboxes)
             {
-                this.GetType().GetProperty(Utilities.FirstLetterToUpperCase(textBox.Name)).SetValue(this, textBox.Text);
+                this.GetType().GetProperty(textBox.Name).SetValue(this, textBox.Text);
             }
         }
 
