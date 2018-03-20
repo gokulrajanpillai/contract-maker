@@ -32,7 +32,13 @@ namespace ContractApplikation
                 var controlsForCustomerTabPage = this.Controls[0].Controls[0].Controls;
                 model.AddCustomer(GenerateCustomerWithControl(controlsForCustomerTabPage));
                 UpdateCustomerComboBox();
+                RefreshForm();
             }
+        }
+
+        private void RefreshForm()
+        {
+            Utilities.ClearControls(this.Controls);
         }
 
         private Ansprechpartner GenerateCustomerWithControl(Control.ControlCollection controlsForCustomerTabPage)

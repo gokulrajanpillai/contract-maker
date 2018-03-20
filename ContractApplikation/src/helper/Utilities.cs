@@ -22,5 +22,31 @@ namespace ContractApplikation.Src.Helper
             newTextBox.Text = value;
             return newTextBox;
         }
+
+        public static void ClearControls(Control.ControlCollection controls)
+        {
+            if (controls != null)
+            {
+                foreach (Control control in controls)
+                {
+                    if (control is TextBox)
+                    {
+                        (control as TextBox).Clear();
+                    }
+                    else if (control is ComboBox)
+                    {
+                        (control as ComboBox).SelectedItem = null;
+                    }
+                    else if (control is RadioButton)
+                    {
+                        (control as RadioButton).Checked = false;
+                    }
+                    else if (control is Control)
+                    {
+                        ClearControls(control.Controls);
+                    }
+                }
+            }
+        } 
     }
 }

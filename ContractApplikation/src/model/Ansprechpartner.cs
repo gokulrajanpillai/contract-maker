@@ -51,7 +51,7 @@ namespace ContractApplikation.Src.Model
 
             foreach (TextBox textBox in listOfTextboxes)
             {
-                this.GetType().GetProperty(textBox.Name).SetValue(this, textBox.Text);
+                this.GetType().GetProperty(Utilities.FirstLetterToUpperCase(textBox.Name)).SetValue(this, textBox.Text);
             }
         }
 
