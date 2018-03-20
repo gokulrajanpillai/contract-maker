@@ -9,3 +9,10 @@ C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\C
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\ContractApplikation.pdb
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\ContractApplikation.exe
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\ContractApplikation.pdb
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Spire.Doc.dll
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Spire.License.dll
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Spire.Pdf.dll
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Microsoft.mshtml.dll
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Spire.Doc.xml
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Spire.License.xml
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\ContractApplikation.csproj.CopyComplete

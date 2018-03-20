@@ -30,8 +30,10 @@
         {
             this.ContractGenerator = new System.Windows.Forms.TabControl();
             this.Ansprechpartner = new System.Windows.Forms.TabPage();
+            this.Ort = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.createCustomerBtn = new System.Windows.Forms.Button();
-            this.ort = new System.Windows.Forms.TextBox();
+            this.PLZ = new System.Windows.Forms.TextBox();
             this.ortLbl = new System.Windows.Forms.Label();
             this.strasse = new System.Windows.Forms.TextBox();
             this.strasseLbl = new System.Windows.Forms.Label();
@@ -54,6 +56,10 @@
             this.frauRadioBtn = new System.Windows.Forms.RadioButton();
             this.herrRadioBtn = new System.Windows.Forms.RadioButton();
             this.Projekt = new System.Windows.Forms.TabPage();
+            this.Koordinator = new System.Windows.Forms.TextBox();
+            this.KoordinatorLbl = new System.Windows.Forms.Label();
+            this.projektTitel = new System.Windows.Forms.TextBox();
+            this.projektTitelLbl = new System.Windows.Forms.Label();
             this.createProjectBtn = new System.Windows.Forms.Button();
             this.ansprechpartnerComboBox = new System.Windows.Forms.ComboBox();
             this.projektBeschreibung = new System.Windows.Forms.TextBox();
@@ -78,8 +84,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.projektComboBox = new System.Windows.Forms.ComboBox();
             this.backgrdDBWorker = new System.ComponentModel.BackgroundWorker();
-            this.projektTitel = new System.Windows.Forms.TextBox();
-            this.projektTitelLbl = new System.Windows.Forms.Label();
             this.ContractGenerator.SuspendLayout();
             this.Ansprechpartner.SuspendLayout();
             this.Projekt.SuspendLayout();
@@ -99,8 +103,10 @@
             // 
             // Ansprechpartner
             // 
+            this.Ansprechpartner.Controls.Add(this.Ort);
+            this.Ansprechpartner.Controls.Add(this.label2);
             this.Ansprechpartner.Controls.Add(this.createCustomerBtn);
-            this.Ansprechpartner.Controls.Add(this.ort);
+            this.Ansprechpartner.Controls.Add(this.PLZ);
             this.Ansprechpartner.Controls.Add(this.ortLbl);
             this.Ansprechpartner.Controls.Add(this.strasse);
             this.Ansprechpartner.Controls.Add(this.strasseLbl);
@@ -130,6 +136,22 @@
             this.Ansprechpartner.Text = "Ansprechpartner Erstellen";
             this.Ansprechpartner.UseVisualStyleBackColor = true;
             // 
+            // Ort
+            // 
+            this.Ort.Location = new System.Drawing.Point(632, 324);
+            this.Ort.Name = "Ort";
+            this.Ort.Size = new System.Drawing.Size(113, 20);
+            this.Ort.TabIndex = 24;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(532, 327);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(21, 13);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "Ort";
+            // 
             // createCustomerBtn
             // 
             this.createCustomerBtn.Location = new System.Drawing.Point(330, 406);
@@ -140,21 +162,21 @@
             this.createCustomerBtn.UseVisualStyleBackColor = true;
             this.createCustomerBtn.Click += new System.EventHandler(this.CreateCustomerBtnClicked);
             // 
-            // ort
+            // PLZ
             // 
-            this.ort.Location = new System.Drawing.Point(632, 324);
-            this.ort.Name = "ort";
-            this.ort.Size = new System.Drawing.Size(212, 20);
-            this.ort.TabIndex = 21;
+            this.PLZ.Location = new System.Drawing.Point(784, 324);
+            this.PLZ.Name = "PLZ";
+            this.PLZ.Size = new System.Drawing.Size(60, 20);
+            this.PLZ.TabIndex = 21;
             // 
             // ortLbl
             // 
             this.ortLbl.AutoSize = true;
-            this.ortLbl.Location = new System.Drawing.Point(528, 327);
+            this.ortLbl.Location = new System.Drawing.Point(751, 327);
             this.ortLbl.Name = "ortLbl";
-            this.ortLbl.Size = new System.Drawing.Size(21, 13);
+            this.ortLbl.Size = new System.Drawing.Size(27, 13);
             this.ortLbl.TabIndex = 20;
-            this.ortLbl.Text = "Ort";
+            this.ortLbl.Text = "PLZ";
             // 
             // strasse
             // 
@@ -324,6 +346,8 @@
             // 
             // Projekt
             // 
+            this.Projekt.Controls.Add(this.Koordinator);
+            this.Projekt.Controls.Add(this.KoordinatorLbl);
             this.Projekt.Controls.Add(this.projektTitel);
             this.Projekt.Controls.Add(this.projektTitelLbl);
             this.Projekt.Controls.Add(this.createProjectBtn);
@@ -353,6 +377,38 @@
             this.Projekt.Text = "Projekt Erstellen";
             this.Projekt.UseVisualStyleBackColor = true;
             // 
+            // Koordinator
+            // 
+            this.Koordinator.Location = new System.Drawing.Point(169, 332);
+            this.Koordinator.Name = "Koordinator";
+            this.Koordinator.Size = new System.Drawing.Size(200, 20);
+            this.Koordinator.TabIndex = 27;
+            // 
+            // KoordinatorLbl
+            // 
+            this.KoordinatorLbl.AutoSize = true;
+            this.KoordinatorLbl.Location = new System.Drawing.Point(62, 335);
+            this.KoordinatorLbl.Name = "KoordinatorLbl";
+            this.KoordinatorLbl.Size = new System.Drawing.Size(61, 13);
+            this.KoordinatorLbl.TabIndex = 26;
+            this.KoordinatorLbl.Text = "Koordinator";
+            // 
+            // projektTitel
+            // 
+            this.projektTitel.Location = new System.Drawing.Point(570, 152);
+            this.projektTitel.Name = "projektTitel";
+            this.projektTitel.Size = new System.Drawing.Size(317, 20);
+            this.projektTitel.TabIndex = 25;
+            // 
+            // projektTitelLbl
+            // 
+            this.projektTitelLbl.AutoSize = true;
+            this.projektTitelLbl.Location = new System.Drawing.Point(439, 153);
+            this.projektTitelLbl.Name = "projektTitelLbl";
+            this.projektTitelLbl.Size = new System.Drawing.Size(63, 13);
+            this.projektTitelLbl.TabIndex = 24;
+            this.projektTitelLbl.Text = "Projekt Titel";
+            // 
             // createProjectBtn
             // 
             this.createProjectBtn.Location = new System.Drawing.Point(308, 412);
@@ -367,7 +423,7 @@
             // 
             this.ansprechpartnerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ansprechpartnerComboBox.FormattingEnabled = true;
-            this.ansprechpartnerComboBox.Location = new System.Drawing.Point(169, 239);
+            this.ansprechpartnerComboBox.Location = new System.Drawing.Point(169, 191);
             this.ansprechpartnerComboBox.Name = "ansprechpartnerComboBox";
             this.ansprechpartnerComboBox.Size = new System.Drawing.Size(200, 21);
             this.ansprechpartnerComboBox.TabIndex = 18;
@@ -397,14 +453,14 @@
             // 
             // verrechnungssatz
             // 
-            this.verrechnungssatz.Location = new System.Drawing.Point(169, 332);
+            this.verrechnungssatz.Location = new System.Drawing.Point(169, 284);
             this.verrechnungssatz.Name = "verrechnungssatz";
             this.verrechnungssatz.Size = new System.Drawing.Size(200, 20);
             this.verrechnungssatz.TabIndex = 14;
             // 
             // anzahlStunden
             // 
-            this.anzahlStunden.Location = new System.Drawing.Point(169, 286);
+            this.anzahlStunden.Location = new System.Drawing.Point(169, 238);
             this.anzahlStunden.Name = "anzahlStunden";
             this.anzahlStunden.Size = new System.Drawing.Size(200, 20);
             this.anzahlStunden.TabIndex = 13;
@@ -453,7 +509,7 @@
             // verrechnungssatzLbl
             // 
             this.verrechnungssatzLbl.AutoSize = true;
-            this.verrechnungssatzLbl.Location = new System.Drawing.Point(62, 335);
+            this.verrechnungssatzLbl.Location = new System.Drawing.Point(62, 287);
             this.verrechnungssatzLbl.Name = "verrechnungssatzLbl";
             this.verrechnungssatzLbl.Size = new System.Drawing.Size(92, 13);
             this.verrechnungssatzLbl.TabIndex = 6;
@@ -462,7 +518,7 @@
             // anzahlStundenLbl
             // 
             this.anzahlStundenLbl.AutoSize = true;
-            this.anzahlStundenLbl.Location = new System.Drawing.Point(62, 289);
+            this.anzahlStundenLbl.Location = new System.Drawing.Point(62, 241);
             this.anzahlStundenLbl.Name = "anzahlStundenLbl";
             this.anzahlStundenLbl.Size = new System.Drawing.Size(82, 13);
             this.anzahlStundenLbl.TabIndex = 5;
@@ -471,7 +527,7 @@
             // ansprechPartnerLbl
             // 
             this.ansprechPartnerLbl.AutoSize = true;
-            this.ansprechPartnerLbl.Location = new System.Drawing.Point(62, 242);
+            this.ansprechPartnerLbl.Location = new System.Drawing.Point(62, 194);
             this.ansprechPartnerLbl.Name = "ansprechPartnerLbl";
             this.ansprechPartnerLbl.Size = new System.Drawing.Size(85, 13);
             this.ansprechPartnerLbl.TabIndex = 4;
@@ -499,7 +555,7 @@
             // 
             this.projektnummer.Location = new System.Drawing.Point(169, 61);
             this.projektnummer.Name = "projektnummer";
-            this.projektnummer.Size = new System.Drawing.Size(48, 20);
+            this.projektnummer.Size = new System.Drawing.Size(200, 20);
             this.projektnummer.TabIndex = 1;
             // 
             // projektnummerLbl
@@ -531,6 +587,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Angebot generieren";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.GenerateContractButtonClicked);
             // 
             // label1
             // 
@@ -554,22 +611,6 @@
             // 
             this.backgrdDBWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgrdDBWorker_DoWork);
             this.backgrdDBWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgrdDBWorker_RunWorkerCompleted);
-            // 
-            // projektTitel
-            // 
-            this.projektTitel.Location = new System.Drawing.Point(570, 152);
-            this.projektTitel.Name = "projektTitel";
-            this.projektTitel.Size = new System.Drawing.Size(317, 20);
-            this.projektTitel.TabIndex = 25;
-            // 
-            // projektTitelLbl
-            // 
-            this.projektTitelLbl.AutoSize = true;
-            this.projektTitelLbl.Location = new System.Drawing.Point(439, 153);
-            this.projektTitelLbl.Name = "projektTitelLbl";
-            this.projektTitelLbl.Size = new System.Drawing.Size(63, 13);
-            this.projektTitelLbl.TabIndex = 24;
-            this.projektTitelLbl.Text = "Projekt Titel";
             // 
             // ContractDetails
             // 
@@ -596,7 +637,7 @@
         private System.Windows.Forms.TabControl ContractGenerator;
         private System.Windows.Forms.TabPage Ansprechpartner;
         private System.Windows.Forms.Button createCustomerBtn;
-        private System.Windows.Forms.TextBox ort;
+        private System.Windows.Forms.TextBox PLZ;
         private System.Windows.Forms.Label ortLbl;
         private System.Windows.Forms.TextBox strasse;
         private System.Windows.Forms.Label strasseLbl;
@@ -645,6 +686,10 @@
         private System.Windows.Forms.ComboBox projektComboBox;
         private System.Windows.Forms.TextBox projektTitel;
         private System.Windows.Forms.Label projektTitelLbl;
+        private System.Windows.Forms.TextBox Ort;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox Koordinator;
+        private System.Windows.Forms.Label KoordinatorLbl;
     }
 }
 

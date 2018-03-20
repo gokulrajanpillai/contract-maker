@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace ContractApplikation.Src.Model
 {
 
-    public enum Honorifics
+    public enum Salutation
     {
         HERR,
         FRAU
@@ -15,7 +15,7 @@ namespace ContractApplikation.Src.Model
 
     public class Ansprechpartner
     {
-        public String Bezeichnung { get; private set; }
+        public String Anrede { get; private set; }
 
         public String Vorname { get; private set; }
 
@@ -28,6 +28,8 @@ namespace ContractApplikation.Src.Model
         public String Telefon { get; private set; }
 
         public String Strasse { get; private set; }
+
+        public String PLZ { get; private set; }
 
         public String Ort { get; private set; }
 
@@ -42,12 +44,12 @@ namespace ContractApplikation.Src.Model
         {
             get
             {
-                return Utilities.FirstLetterToUpperCase(Bezeichnung) + ". " + Utilities.FirstLetterToUpperCase(Vorname) + " " + Utilities.FirstLetterToUpperCase(Nachname);
+                return Utilities.FirstLetterToUpperCase(Anrede.ToLower()) + ". " + Utilities.FirstLetterToUpperCase(Vorname) + " " + Utilities.FirstLetterToUpperCase(Nachname);
             }
         }
-        public Ansprechpartner(List<TextBox> listOfTextboxes, Honorifics bezeichnung)
+        public Ansprechpartner(List<TextBox> listOfTextboxes, Salutation bezeichnung)
         {
-            this.Bezeichnung = bezeichnung.ToString();
+            this.Anrede = bezeichnung.ToString();
 
             foreach (TextBox textBox in listOfTextboxes)
             {
@@ -57,17 +59,18 @@ namespace ContractApplikation.Src.Model
 
         public Ansprechpartner(OleDbDataReader dataReader)
         {
-            this.Bezeichnung         = dataReader.GetValue(1).ToString();
+            this.Anrede              = dataReader.GetValue(1).ToString();
             this.Vorname             = dataReader.GetValue(2).ToString();
             this.Nachname            = dataReader.GetValue(3).ToString();
             this.Abteilung           = dataReader.GetValue(4).ToString();
             this.Email               = dataReader.GetValue(5).ToString();
             this.Telefon             = dataReader.GetValue(6).ToString();
             this.Strasse             = dataReader.GetValue(7).ToString();
-            this.Ort                 = dataReader.GetValue(8).ToString();
-            this.Firma               = dataReader.GetValue(9).ToString();
-            this.Abteilungszusatz    = dataReader.GetValue(10).ToString();
-            this.Geschäftsbereich    = dataReader.GetValue(11).ToString();
+            this.PLZ                 = dataReader.GetValue(8).ToString();
+            this.Ort                 = dataReader.GetValue(9).ToString();
+            this.Firma               = dataReader.GetValue(10).ToString();
+            this.Abteilungszusatz    = dataReader.GetValue(11).ToString();
+            this.Geschäftsbereich    = dataReader.GetValue(12).ToString();
         }
 
     }

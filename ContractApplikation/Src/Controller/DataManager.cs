@@ -26,5 +26,15 @@ namespace ContractApplikation.Src.Controller
             ProjectList.Add(project);
             OleDbHelper.InsertProjectDetail(project);
         }
+
+        public Ansprechpartner CustomerForIndex(int index)
+        {
+            return CustomerList[index];
+        }
+
+        public Projekt ProjektForIndex(int index)
+        {
+            return ProjectList[index];
+        }
     }
 }

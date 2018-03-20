@@ -43,12 +43,12 @@ namespace ContractApplikation
 
         private Ansprechpartner GenerateCustomerWithControl(Control.ControlCollection controlsForCustomerTabPage)
         {
-            return new Ansprechpartner(ListOfTextBoxFromControlCollection(controlsForCustomerTabPage), GetHonorificsForCustomer());
+            return new Ansprechpartner(ListOfTextBoxFromControlCollection(controlsForCustomerTabPage), GetSalutationForCustomer());
         }
 
-        private Honorifics GetHonorificsForCustomer()
+        private Salutation GetSalutationForCustomer()
         {
-            return (herrRadioBtn.Checked ? Honorifics.HERR : Honorifics.FRAU);
+            return (herrRadioBtn.Checked ? Salutation.HERR : Salutation.FRAU);
         }
 
         /**
@@ -225,5 +225,13 @@ namespace ContractApplikation
                 ansprechpartnerComboBox.Items.Add(new CustomComboBoxItem(cust.Name, model.CustomerList.IndexOf(cust)));
             }
         }
+
+        private void GenerateContractButtonClicked(object sender, EventArgs e)
+        {
+            Projekt proj            = model.ProjektForIndex(projektComboBox.SelectedIndex);
+            Ansprechpartner kunden  = model.CustomerForIndex(Int32.Parse(proj.AnsprechpartnerID));
+            DocumentManager.GenerateContractDocument("New.docx", kunden, proj);
+        }
+
     }
 }

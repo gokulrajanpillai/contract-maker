@@ -22,6 +22,8 @@ namespace ContractApplikation.Src.Model
 
         public String ProjektTitel { get; private set; }
 
+        public String Koordinator { get; private set; }
+
         public String Gesprächsperson { get; private set; }
 
         public String Disponent { get; private set; }
@@ -45,9 +47,10 @@ namespace ContractApplikation.Src.Model
             this.AnzahlStunden       = dataReader.GetValue(5).ToString();
             this.Verrechnungssatz    = dataReader.GetValue(6).ToString();
             this.ProjektTitel        = dataReader.GetValue(7).ToString();
-            this.Gesprächsperson     = dataReader.GetValue(8).ToString();
-            this.Disponent           = dataReader.GetValue(9).ToString();
-            this.ProjektBeschreibung = dataReader.GetValue(10).ToString();
+            this.Koordinator         = dataReader.GetValue(8).ToString();
+            this.Gesprächsperson     = dataReader.GetValue(9).ToString();
+            this.Disponent           = dataReader.GetValue(10).ToString();
+            this.ProjektBeschreibung = dataReader.GetValue(11).ToString();
         }
     }
 }

@@ -26,19 +26,20 @@ namespace ContractApplikation.Src.Helper
         private static void AddCustomerDetailToDatabase(Ansprechpartner kunden, OleDbConnection conn)
         {
             var cmd = new OleDbCommand("INSERT INTO Ansprechpartner " +
-                    "(Bezeichnung, Vorname, Nachname, Abteilung, Email, Telefon, Strasse, Ort, Firma, Abteilungszusatz, Geschäftsbereich) " +
-                    "VALUES (@Bezeichnung, @Vorname, @Nachname, @Abteilung, @Email, @Telefon, @Strasse, @Ort, @Firma, @Abteilungszusatz, @Geschäftsbereich)");
+                    "(Bezeichnung, Vorname, Nachname, Abteilung, Email, Telefon, Strasse, PLZ, Ort, Firma, Abteilungszusatz, Geschäftsbereich) " +
+                    "VALUES (@Bezeichnung, @Vorname, @Nachname, @Abteilung, @Email, @Telefon, @Strasse, @PLZ, @Ort, @Firma, @Abteilungszusatz, @Geschäftsbereich)");
             cmd.Connection = conn;
 
             if (cmd.Connection.State == System.Data.ConnectionState.Open)
             {
-                cmd.Parameters.Add("@Bezeichnung", OleDbType.VarChar).Value = kunden.Bezeichnung;
+                cmd.Parameters.Add("@Anrede", OleDbType.VarChar).Value = kunden.Anrede;
                 cmd.Parameters.Add("@Vorname", OleDbType.VarChar).Value = kunden.Vorname;
                 cmd.Parameters.Add("@Nachname", OleDbType.VarChar).Value = kunden.Nachname;
                 cmd.Parameters.Add("@Abteilung", OleDbType.VarChar).Value = kunden.Abteilung;
                 cmd.Parameters.Add("@Email", OleDbType.VarChar).Value = kunden.Email;
                 cmd.Parameters.Add("@Telefon", OleDbType.VarChar).Value = kunden.Telefon;
                 cmd.Parameters.Add("@Strasse", OleDbType.VarChar).Value = kunden.Strasse;
+                cmd.Parameters.Add("@PLZ", OleDbType.VarChar).Value = kunden.PLZ;
                 cmd.Parameters.Add("@Ort", OleDbType.VarChar).Value = kunden.Ort;
                 cmd.Parameters.Add("@Firma", OleDbType.VarChar).Value = kunden.Firma;
                 cmd.Parameters.Add("@Abteilungszusatz", OleDbType.VarChar).Value = kunden.Abteilungszusatz;
