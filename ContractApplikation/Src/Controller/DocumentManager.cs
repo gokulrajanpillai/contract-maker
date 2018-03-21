@@ -109,6 +109,8 @@ namespace ContractApplikation.Src.Controller
                             case "[Projekt_EndDatum]"           : paragraph = paragraph.Replace("[Projekt_EndDatum]", Projekt.EndDatum); break;
                             case "[Projekt_AnzahlStunden]"      : paragraph = paragraph.Replace("[Projekt_AnzahlStunden]", Projekt.AnzahlStunden); break;
                             case "[Projekt_Verrechnungssatz]"   : paragraph = paragraph.Replace("[Projekt_Verrechnungssatz]", Projekt.Verrechnungssatz); break;
+                            case "[Projekt_Einzelpreis]"        : paragraph = paragraph.Replace("[Projekt_Einzelpreis]", Projekt.Einzelpreis); break;
+                            case "[Projekt_AngebotSumme]"       : paragraph = paragraph.Replace("[Projekt_AngebotSumme]", Projekt.AngebotSumme); break;
                             case "[Projekt_ProjektTitel]"       : paragraph = paragraph.Replace("[Projekt_ProjektTitel]", Projekt.ProjektTitel); break;
                             case "[Projekt_Koordinator]"        : paragraph = paragraph.Replace("[Projekt_Koordinator]", Projekt.Koordinator); break;
                             case "[Projekt_Gesprächsperson]"    : paragraph = paragraph.Replace("[Projekt_Gesprächsperson]", Projekt.Gesprächsperson); break;
@@ -116,11 +118,9 @@ namespace ContractApplikation.Src.Controller
                             case "[Projekt_ProjektBeschreibung]": paragraph = paragraph.Replace("[Projekt_ProjektBeschreibung]", Projekt.ProjektBeschreibung); break;
                         }
                     }
-
                     para.Text = paragraph;
                 }
             }
-
             doc.SaveToFile(FinishedContractDocumentPath() + "\\" + NameOfDocument, DocumentFormat);
             MessageBox.Show("File processed and saved successfully");
         }

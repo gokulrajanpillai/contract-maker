@@ -30,6 +30,28 @@ namespace ContractApplikation.Src.Model
 
         public String ProjektBeschreibung { get; private set; }
 
+        // Custom property: not part of the database
+        public String Einzelpreis
+        {
+            get
+            {
+                decimal payment = decimal.Parse(Verrechnungssatz);
+                return Utilities.AddCurrencySymbol(decimal.Round(payment, 2, MidpointRounding.AwayFromZero).ToString());
+            }
+        }
+
+        // Custom property: not part of the database
+        public String AngebotSumme
+        {
+            get
+            {
+                decimal hours = decimal.Parse(AnzahlStunden);
+                decimal payment = decimal.Parse(Verrechnungssatz);
+                decimal sum = hours * payment;
+                return Utilities.AddCurrencySymbol(decimal.Round(sum, 2, MidpointRounding.AwayFromZero).ToString());
+            }
+        }
+
         public Projekt(List<TextBox> listOfTextboxes)
         {
             foreach (TextBox textBox in listOfTextboxes)

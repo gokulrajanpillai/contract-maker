@@ -23,6 +23,11 @@ namespace ContractApplikation.Src.Helper
             return newTextBox;
         }
 
+        public static string AddCurrencySymbol(string text)
+        {
+            return text + " " + Constants.CURRENCY_SYMBOL;
+        }
+
         public static void ClearControls(Control.ControlCollection controls)
         {
             if (controls != null)
