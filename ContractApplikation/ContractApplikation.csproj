@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Src\Controller\DocumentManager.cs" />
+    <Compile Include="Src\Helper\Constants.cs" />
     <Compile Include="Src\Helper\CustomComboBoxItem.cs" />
     <Compile Include="Src\Helper\OleDbHelper.cs" />
     <Compile Include="Src\Helper\Utilities.cs" />
@@ -87,6 +88,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Data\PrototypeVertrag.docx" />
+    <None Include="Data\TabelleKosten.xlsx" />
+    <None Include="Data\Vertrag-DB.laccdb" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -113,9 +117,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Vertrag-DB.accdb">
+    <Content Include="Data\Vertrag-DB.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Output\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

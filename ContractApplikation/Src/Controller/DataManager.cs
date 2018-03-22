@@ -15,16 +15,16 @@ namespace ContractApplikation.Src.Controller
             ProjectList  = OleDbHelper.FetchProjectDetails();
         }
 
-        public void AddCustomer(Ansprechpartner customer)
+        public bool AddCustomer(Ansprechpartner customer)
         {
             CustomerList.Add(customer);
-            OleDbHelper.InsertCustomerDetail(customer);
+            return OleDbHelper.InsertCustomerDetail(customer);
         }
 
-        public void AddProject(Projekt project)
+        public bool AddProject(Projekt project)
         {
             ProjectList.Add(project);
-            OleDbHelper.InsertProjectDetail(project);
+            return OleDbHelper.InsertProjectDetail(project);
         }
 
         public Ansprechpartner CustomerForIndex(int index)

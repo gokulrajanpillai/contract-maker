@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ContractApplikation.Src.Model
@@ -14,11 +15,11 @@ namespace ContractApplikation.Src.Model
 
         public String EndDatum { get; private set; }
 
-        public String AnsprechpartnerID { get; private set; }
+        public Int32 AnsprechpartnerID { get; private set; }
 
-        public String AnzahlStunden { get; private set; }
+        public Int32 AnzahlStunden { get; private set; }
 
-        public String Verrechnungssatz { get; private set; }
+        public Int32 Verrechnungssatz { get; private set; }
 
         public String ProjektTitel { get; private set; }
 
@@ -35,7 +36,7 @@ namespace ContractApplikation.Src.Model
         {
             get
             {
-                decimal payment = decimal.Parse(Verrechnungssatz);
+                decimal payment = Verrechnungssatz;
                 return Utilities.AddCurrencySymbol(decimal.Round(payment, 2, MidpointRounding.AwayFromZero).ToString());
             }
         }
@@ -45,8 +46,8 @@ namespace ContractApplikation.Src.Model
         {
             get
             {
-                decimal hours = decimal.Parse(AnzahlStunden);
-                decimal payment = decimal.Parse(Verrechnungssatz);
+                decimal hours = AnzahlStunden;
+                decimal payment = Verrechnungssatz;
                 decimal sum = hours * payment;
                 return Utilities.AddCurrencySymbol(decimal.Round(sum, 2, MidpointRounding.AwayFromZero).ToString());
             }
@@ -56,23 +57,32 @@ namespace ContractApplikation.Src.Model
         {
             foreach (TextBox textBox in listOfTextboxes)
             {
-                this.GetType().GetProperty(Utilities.FirstLetterToUpperCase(textBox.Name)).SetValue(this, textBox.Text);
+                PropertyInfo property = this.GetType().GetProperty(Utilities.FirstLetterToUpperCase(textBox.Name));
+
+                if (property.PropertyType == typeof(Int32))
+                {
+                    property.SetValue(this, int.Parse(textBox.Text));
+                }
+                else
+                {
+                    property.SetValue(this, textBox.Text);
+                }
             }
         }
 
         public Projekt(OleDbDataReader dataReader)
         {
-            this.Projektnummer       = dataReader.GetValue(1).ToString();
-            this.StartDatum          = dataReader.GetValue(2).ToString();
-            this.EndDatum            = dataReader.GetValue(3).ToString();
-            this.AnsprechpartnerID   = dataReader.GetValue(4).ToString();
-            this.AnzahlStunden       = dataReader.GetValue(5).ToString();
-            this.Verrechnungssatz    = dataReader.GetValue(6).ToString();
-            this.ProjektTitel        = dataReader.GetValue(7).ToString();
-            this.Koordinator         = dataReader.GetValue(8).ToString();
-            this.Gesprächsperson     = dataReader.GetValue(9).ToString();
-            this.Disponent           = dataReader.GetValue(10).ToString();
-            this.ProjektBeschreibung = dataReader.GetValue(11).ToString();
+            this.Projektnummer          = dataReader.GetValue(1).ToString();
+            this.StartDatum             = dataReader.GetValue(2).ToString();
+            this.EndDatum               = dataReader.GetValue(3).ToString();
+            this.AnsprechpartnerID      = dataReader.GetInt32(4);
+            this.AnzahlStunden          = dataReader.GetInt32(5);
+            this.Verrechnungssatz       = dataReader.GetInt32(6);
+            this.Koordinator            = dataReader.GetValue(7).ToString();
+            this.Gesprächsperson        = dataReader.GetValue(8).ToString();
+            this.Disponent              = dataReader.GetValue(9).ToString();
+            this.ProjektTitel           = dataReader.GetValue(10).ToString();
+            this.ProjektBeschreibung    = dataReader.GetValue(11).ToString();
         }
     }
 }

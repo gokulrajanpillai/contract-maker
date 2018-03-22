@@ -1,4 +1,5 @@
 ﻿
+using ContractApplikation.Src.Helper;
 using ContractApplikation.Src.Model;
 using Spire.Doc;
 using Spire.Doc.Documents;
@@ -9,26 +10,11 @@ namespace ContractApplikation.Src.Controller
 {
     public class DocumentManager
     {
-        private static FileFormat DocumentFormat = FileFormat.Docx;
+        private static readonly FileFormat DocumentFormat = FileFormat.Docx;
 
-        private static string CurrentProjectPath()
+        private static string PrototypeDocumentPath()
         {
-            return Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-        }
-
-        private static string MasterDocumentPath()
-        {
-            return CurrentProjectPath() + "\\vertrag.docx";
-        }
-
-        private static string SaveDocumentPath()
-        {
-            return CurrentProjectPath();
-        }
-
-        private static string FinishedContractDocumentPath()
-        {
-            return CurrentProjectPath();
+            return Constants.FileLocation.PROTOTYPE_CONTRACT;
         }
 
         private static Document LoadDocument(string documentFilePath)
@@ -38,9 +24,9 @@ namespace ContractApplikation.Src.Controller
             return doc;
         }
 
-        private static void SaveDocument(Document doc, string nameOfDocument)
+        private static void SaveDocument(Document doc, string NameOfDocument)
         {
-            doc.SaveToFile(SaveDocumentPath() + "\\" + nameOfDocument, DocumentFormat);
+            doc.SaveToFile(Constants.FileLocation.OutputFilePath(NameOfDocument), DocumentFormat);
         }
 
         public static void CreateSampleDocument()
@@ -50,8 +36,8 @@ namespace ContractApplikation.Src.Controller
             Paragraph para = section.AddParagraph();
             para.AppendText("Created my first document!");
 
-            MessageBox.Show("Directory: "+Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +"\\CreatedWordDocument.docx");
-            doc.SaveToFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +"\\CreatedWordDocument.docx", FileFormat.Docx);
+            MessageBox.Show("Directory: " + Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\CreatedWordDocument.docx");
+            doc.SaveToFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\CreatedWordDocument.docx", FileFormat.Docx);
         }
 
         public static void DisplayDocumentWithName(string name)
@@ -78,51 +64,59 @@ namespace ContractApplikation.Src.Controller
 
         public static void GenerateContractDocument(string NameOfDocument, Ansprechpartner Kunden, Projekt Projekt)
         {
-            Document doc = LoadDocument(MasterDocumentPath());
+            Document doc = LoadDocument(PrototypeDocumentPath());
 
             foreach (Section section in doc.Sections)
             {
                 foreach (Paragraph para in section.Paragraphs)
                 {
                     string paragraph = para.Text;
-                    
-                    foreach (string word in paragraph.Split(' '))
-                    {
-                        switch (word)
-                        {
-                            case "[Kunden_Anrede]"          : paragraph = paragraph.Replace("[Kunden_Anrede]", Kunden.Anrede); break;
-                            case "[Kunden_Vorname]"         : paragraph = paragraph.Replace("[Kunden_Vorname]", Kunden.Vorname); break;
-                            case "[Kunden_Nachname]"        : paragraph = paragraph.Replace("[Kunden_Nachname]", Kunden.Nachname); break;
-                            case "[Kunden_Vollname]"        : paragraph = paragraph.Replace("[Kunden_Vollname]", Kunden.Name); break;
-                            case "[Kunden_Firma]"           : paragraph = paragraph.Replace("[Kunden_Firma]", Kunden.Firma); break;
-                            case "[Kunden_Geschäftsbereich]": paragraph = paragraph.Replace("[Kunden_Geschäftsbereich]", Kunden.Geschäftsbereich); break;
-                            case "[Kunden_Abteilungszusatz]": paragraph = paragraph.Replace("[Kunden_Abteilungszusatz]", Kunden.Abteilungszusatz); break;
-                            case "[Kunden_Abteilung]"       : paragraph = paragraph.Replace("[Kunden_Abteilung]", Kunden.Abteilung); break;
-                            case "[Kunden_Email]"           : paragraph = paragraph.Replace("[Kunden_Email]", Kunden.Email); break;
-                            case "[Kunden_Telefon]"         : paragraph = paragraph.Replace("[Kunden_Telefon]", Kunden.Telefon); break;
-                            case "[Kunden_Strasse]"         : paragraph = paragraph.Replace("[Kunden_Strasse]", Kunden.Strasse); break;
-                            case "[Kunden_PLZ]"             : paragraph = paragraph.Replace("[Kunden_PLZ]", Kunden.PLZ); break;
-                            case "[Kunden_Ort]"             : paragraph = paragraph.Replace("[Kunden_Ort]", Kunden.Ort); break;
-
-                            case "[Projekt_Projektnummer]"      : paragraph = paragraph.Replace("[Projekt_Projektnummer]", Projekt.Projektnummer); break;
-                            case "[Projekt_StartDatum]"         : paragraph = paragraph.Replace("[Projekt_StartDatum]", Projekt.StartDatum); break;
-                            case "[Projekt_EndDatum]"           : paragraph = paragraph.Replace("[Projekt_EndDatum]", Projekt.EndDatum); break;
-                            case "[Projekt_AnzahlStunden]"      : paragraph = paragraph.Replace("[Projekt_AnzahlStunden]", Projekt.AnzahlStunden); break;
-                            case "[Projekt_Verrechnungssatz]"   : paragraph = paragraph.Replace("[Projekt_Verrechnungssatz]", Projekt.Verrechnungssatz); break;
-                            case "[Projekt_Einzelpreis]"        : paragraph = paragraph.Replace("[Projekt_Einzelpreis]", Projekt.Einzelpreis); break;
-                            case "[Projekt_AngebotSumme]"       : paragraph = paragraph.Replace("[Projekt_AngebotSumme]", Projekt.AngebotSumme); break;
-                            case "[Projekt_ProjektTitel]"       : paragraph = paragraph.Replace("[Projekt_ProjektTitel]", Projekt.ProjektTitel); break;
-                            case "[Projekt_Koordinator]"        : paragraph = paragraph.Replace("[Projekt_Koordinator]", Projekt.Koordinator); break;
-                            case "[Projekt_Gesprächsperson]"    : paragraph = paragraph.Replace("[Projekt_Gesprächsperson]", Projekt.Gesprächsperson); break;
-                            case "[Projekt_Disponent]"          : paragraph = paragraph.Replace("[Projekt_Disponent]", Projekt.Disponent); break;
-                            case "[Projekt_ProjektBeschreibung]": paragraph = paragraph.Replace("[Projekt_ProjektBeschreibung]", Projekt.ProjektBeschreibung); break;
-                        }
-                    }
+                    paragraph = ReplaceCustomerPlaceholders(paragraph, Kunden);
+                    paragraph = ReplaceProjektPlaceholders(paragraph, Projekt);
                     para.Text = paragraph;
                 }
             }
-            doc.SaveToFile(FinishedContractDocumentPath() + "\\" + NameOfDocument, DocumentFormat);
+
+            SaveDocument(doc, NameOfDocument);
             MessageBox.Show("File processed and saved successfully");
+        }
+
+        private static string ReplaceCustomerPlaceholders(string paragraph, Ansprechpartner kunden)
+        {
+            paragraph = paragraph.Replace("[Kunden_Anrede]", kunden.Anrede);
+            paragraph = paragraph.Replace("[Kunden_Vorname]", kunden.Vorname);
+            paragraph = paragraph.Replace("[Kunden_Nachname]", kunden.Nachname);
+            paragraph = paragraph.Replace("[Kunden_Vollname]", kunden.Name);
+            paragraph = paragraph.Replace("[Kunden_Firma]", kunden.Firma);
+            paragraph = paragraph.Replace("[Kunden_Geschäftsbereich]", kunden.Geschäftsbereich);
+            paragraph = paragraph.Replace("[Kunden_Abteilungszusatz]", kunden.Abteilungszusatz);
+            paragraph = paragraph.Replace("[Kunden_Abteilung]", kunden.Abteilung);
+            paragraph = paragraph.Replace("[Kunden_Email]", kunden.Email);
+            paragraph = paragraph.Replace("[Kunden_Telefon]", kunden.Telefon);
+            paragraph = paragraph.Replace("[Kunden_Strasse]", kunden.Strasse);
+            paragraph = paragraph.Replace("[Kunden_PLZ]", kunden.PLZ);
+            paragraph = paragraph.Replace("[Kunden_Ort]", kunden.Ort);
+
+            return paragraph;
+        }
+
+
+        private static string ReplaceProjektPlaceholders(string paragraph, Projekt project)
+        {
+            paragraph = paragraph.Replace("[Projekt_Projektnummer]", project.Projektnummer);
+            paragraph = paragraph.Replace("[Projekt_StartDatum]", project.StartDatum);
+            paragraph = paragraph.Replace("[Projekt_EndDatum]", project.EndDatum);
+            paragraph = paragraph.Replace("[Projekt_AnzahlStunden]", project.AnzahlStunden.ToString());
+            paragraph = paragraph.Replace("[Projekt_Verrechnungssatz]", project.Verrechnungssatz.ToString());
+            paragraph = paragraph.Replace("[Projekt_Einzelpreis]", project.Einzelpreis);
+            paragraph = paragraph.Replace("[Projekt_AngebotSumme]", project.AngebotSumme);
+            paragraph = paragraph.Replace("[Projekt_ProjektTitel]", project.ProjektTitel);
+            paragraph = paragraph.Replace("[Projekt_Koordinator]", project.Koordinator);
+            paragraph = paragraph.Replace("[Projekt_Gesprächsperson]", project.Gesprächsperson);
+            paragraph = paragraph.Replace("[Projekt_Disponent]", project.Disponent);
+            paragraph = paragraph.Replace("[Projekt_ProjektBeschreibung]", project.ProjektBeschreibung);
+
+            return paragraph;
         }
     }
 }

@@ -30,9 +30,11 @@ namespace ContractApplikation
             if (CustomerDetailIsValid())
             {
                 var controlsForCustomerTabPage = this.Controls[0].Controls[0].Controls;
-                model.AddCustomer(GenerateCustomerWithControl(controlsForCustomerTabPage));
-                UpdateCustomerComboBox();
-                RefreshForm();
+                if (model.AddCustomer(GenerateCustomerWithControl(controlsForCustomerTabPage)))
+                {
+                    UpdateCustomerComboBox();
+                    RefreshForm();
+                }
             }
         }
 
@@ -119,8 +121,11 @@ namespace ContractApplikation
             if (ProjectDetailIsValid())
             {
                 var controlsForProjectTabPage = this.Controls[0].Controls[1].Controls;
-                model.AddProject(GenerateProjectWithControl(controlsForProjectTabPage));
-                UpdateProjectComboBox();
+                if (model.AddProject(GenerateProjectWithControl(controlsForProjectTabPage)))
+                {
+                    UpdateProjectComboBox();
+                    RefreshForm();
+                }
             }
         }
 
@@ -141,17 +146,12 @@ namespace ContractApplikation
             if (emptyItem != null)
             {
                 MessageBox.Show("Geben Sie den " + emptyItem.Name + " ein");
-            }
-            else if (!AreProjectDatesValid())
-            {
-                MessageBox.Show("Wähle ein Geschlecht aus");
+                return false;
             }
             else
             {
-                return true;
+                return AreProjectDatesValid();
             }
-
-            return false;
         }
 
         private bool AreProjectDatesValid()
@@ -229,7 +229,7 @@ namespace ContractApplikation
         private void GenerateContractButtonClicked(object sender, EventArgs e)
         {
             Projekt proj            = model.ProjektForIndex(projektComboBox.SelectedIndex);
-            Ansprechpartner kunden  = model.CustomerForIndex(Int32.Parse(proj.AnsprechpartnerID));
+            Ansprechpartner kunden  = model.CustomerForIndex(proj.AnsprechpartnerID);
             DocumentManager.GenerateContractDocument("New.docx", kunden, proj);
         }
 

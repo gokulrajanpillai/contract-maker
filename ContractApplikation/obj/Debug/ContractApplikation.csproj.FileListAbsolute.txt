@@ -3,7 +3,6 @@ C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\C
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\ContractApplikation.Properties.Resources.resources
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\ContractApplikation.csproj.GenerateResource.cache
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\ContractApplikation.csproj.CoreCompileInputs.cache
-C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Vertrag-DB.accdb
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\ContractApplikation.exe.config
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\ContractApplikation.exe
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\ContractApplikation.pdb
@@ -16,3 +15,4 @@ C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\M
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Spire.Doc.xml
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Spire.License.xml
 C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\obj\Debug\ContractApplikation.csproj.CopyComplete
+C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\bin\Debug\Data\Vertrag-DB.accdb
