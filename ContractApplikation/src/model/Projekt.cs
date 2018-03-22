@@ -78,11 +78,11 @@ namespace ContractApplikation.Src.Model
             this.AnsprechpartnerID      = dataReader.GetInt32(4);
             this.AnzahlStunden          = dataReader.GetInt32(5);
             this.Verrechnungssatz       = dataReader.GetInt32(6);
-            this.Koordinator            = dataReader.GetValue(7).ToString();
+            this.Koordinator            = dataReader.GetValue(11).ToString();
             this.Gesprächsperson        = dataReader.GetValue(8).ToString();
             this.Disponent              = dataReader.GetValue(9).ToString();
-            this.ProjektTitel           = dataReader.GetValue(10).ToString();
-            this.ProjektBeschreibung    = dataReader.GetValue(11).ToString();
+            this.ProjektTitel           = dataReader.GetValue(7).ToString();
+            this.ProjektBeschreibung    = dataReader.GetValue(10).ToString();
         }
     }
 }

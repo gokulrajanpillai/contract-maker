@@ -188,19 +188,6 @@ namespace ContractApplikation
         {
             UpdateComboBoxValues();
         }
-
-        /**
-        private void BindComboBoxValues()
-        {
-            projektComboBox.DataSource      = model.ProjectList;
-            projektComboBox.DisplayMember   = "ProjektTitel";
-            projektComboBox.ValueMember     = null;
-
-            ansprechpartnerComboBox.DataSource      = model.CustomerList;
-            ansprechpartnerComboBox.DisplayMember   = "Name";
-            ansprechpartnerComboBox.ValueMember     = null;
-        }
-    **/
     
         private void UpdateComboBoxValues()
         {

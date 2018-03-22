@@ -3,6 +3,7 @@ using ContractApplikation.Src.Helper;
 using ContractApplikation.Src.Model;
 using Spire.Doc;
 using Spire.Doc.Documents;
+using Spire.Doc.Fields;
 using System.IO;
 using System.Windows.Forms;
 
@@ -66,6 +67,10 @@ namespace ContractApplikation.Src.Controller
             Document doc = LoadDocument(PrototypeDocumentPath());
             ReplaceCustomerPlaceholders(ref doc, Kunden);
             ReplaceProjektPlaceholders(ref doc, Projekt);
+
+            Table table = new Table(doc);
+            ReplacePlaceholderWithTable(ref doc, "[Projekt_TabelleKosten]", table);
+
             SaveDocument(doc, NameOfDocument);
             MessageBox.Show("File processed and saved successfully");
         }
@@ -102,6 +107,21 @@ namespace ContractApplikation.Src.Controller
             doc.Replace("[Projekt_Gesprächsperson]", project.Gesprächsperson, true, false);
             doc.Replace("[Projekt_Disponent]", project.Disponent, true, false);
             doc.Replace("[Projekt_ProjektBeschreibung]", project.ProjektBeschreibung, true, false);
+        }
+
+
+        private static void ReplacePlaceholderWithTable(ref Document doc, string placeholder, Table tabelle)
+        {
+            Section section = doc.Sections[0];
+            TextSelection selection = doc.FindString(placeholder, true, true);
+            TextRange range = selection.GetAsOneRange();
+            Paragraph paragraph = range.OwnerParagraph;
+            Body body = paragraph.OwnerTextBody;
+            int index = body.ChildObjects.IndexOf(paragraph);
+            Table table = section.AddTable(true);
+            table.ResetCells(3, 3);
+            body.ChildObjects.Remove(paragraph);
+            body.ChildObjects.Insert(index, table);
         }
     }
 }
