@@ -56,7 +56,7 @@
             this.frauRadioBtn = new System.Windows.Forms.RadioButton();
             this.herrRadioBtn = new System.Windows.Forms.RadioButton();
             this.Projekt = new System.Windows.Forms.TabPage();
-            this.Koordinator = new System.Windows.Forms.TextBox();
+            this.koordinator = new System.Windows.Forms.TextBox();
             this.KoordinatorLbl = new System.Windows.Forms.Label();
             this.projektTitel = new System.Windows.Forms.TextBox();
             this.projektTitelLbl = new System.Windows.Forms.Label();
@@ -84,6 +84,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.projektComboBox = new System.Windows.Forms.ComboBox();
             this.backgrdDBWorker = new System.ComponentModel.BackgroundWorker();
+            this.contractName = new System.Windows.Forms.TextBox();
+            this.contractNameLbl = new System.Windows.Forms.Label();
             this.ContractGenerator.SuspendLayout();
             this.Ansprechpartner.SuspendLayout();
             this.Projekt.SuspendLayout();
@@ -346,7 +348,7 @@
             // 
             // Projekt
             // 
-            this.Projekt.Controls.Add(this.Koordinator);
+            this.Projekt.Controls.Add(this.koordinator);
             this.Projekt.Controls.Add(this.KoordinatorLbl);
             this.Projekt.Controls.Add(this.projektTitel);
             this.Projekt.Controls.Add(this.projektTitelLbl);
@@ -377,12 +379,12 @@
             this.Projekt.Text = "Projekt Erstellen";
             this.Projekt.UseVisualStyleBackColor = true;
             // 
-            // Koordinator
+            // koordinator
             // 
-            this.Koordinator.Location = new System.Drawing.Point(169, 332);
-            this.Koordinator.Name = "Koordinator";
-            this.Koordinator.Size = new System.Drawing.Size(200, 20);
-            this.Koordinator.TabIndex = 27;
+            this.koordinator.Location = new System.Drawing.Point(169, 332);
+            this.koordinator.Name = "koordinator";
+            this.koordinator.Size = new System.Drawing.Size(200, 20);
+            this.koordinator.TabIndex = 27;
             // 
             // KoordinatorLbl
             // 
@@ -569,6 +571,8 @@
             // 
             // Angebot
             // 
+            this.Angebot.Controls.Add(this.contractNameLbl);
+            this.Angebot.Controls.Add(this.contractName);
             this.Angebot.Controls.Add(this.button1);
             this.Angebot.Controls.Add(this.label1);
             this.Angebot.Controls.Add(this.projektComboBox);
@@ -606,11 +610,28 @@
             this.projektComboBox.Name = "projektComboBox";
             this.projektComboBox.Size = new System.Drawing.Size(469, 21);
             this.projektComboBox.TabIndex = 0;
+            this.projektComboBox.SelectedIndexChanged += new System.EventHandler(this.ProjektComboBox_SelectedIndexChanged);
             // 
             // backgrdDBWorker
             // 
             this.backgrdDBWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgrdDBWorker_DoWork);
             this.backgrdDBWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgrdDBWorker_RunWorkerCompleted);
+            // 
+            // contractName
+            // 
+            this.contractName.Location = new System.Drawing.Point(368, 145);
+            this.contractName.Name = "contractName";
+            this.contractName.Size = new System.Drawing.Size(469, 20);
+            this.contractName.TabIndex = 3;
+            // 
+            // contractNameLbl
+            // 
+            this.contractNameLbl.AutoSize = true;
+            this.contractNameLbl.Location = new System.Drawing.Point(164, 148);
+            this.contractNameLbl.Name = "contractNameLbl";
+            this.contractNameLbl.Size = new System.Drawing.Size(169, 13);
+            this.contractNameLbl.TabIndex = 4;
+            this.contractNameLbl.Text = "Vertragsname (ohne Dateiendung)";
             // 
             // ContractDetails
             // 
@@ -688,8 +709,10 @@
         private System.Windows.Forms.Label projektTitelLbl;
         private System.Windows.Forms.TextBox Ort;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox Koordinator;
+        private System.Windows.Forms.TextBox koordinator;
         private System.Windows.Forms.Label KoordinatorLbl;
+        private System.Windows.Forms.Label contractNameLbl;
+        private System.Windows.Forms.TextBox contractName;
     }
 }
 

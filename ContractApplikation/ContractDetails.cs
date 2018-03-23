@@ -129,11 +129,20 @@ namespace ContractApplikation
             }
         }
 
+        private string RemoveTimeFromDateString(string dateString)
+        {
+            string finalString = dateString;
+            if (dateString.Contains(" "))
+                finalString = dateString.Substring(0, dateString.IndexOf(' '));
+
+            return finalString;
+        }
+
         private Projekt GenerateProjectWithControl(Control.ControlCollection controlsForProjectTabPage)
         {
             List<TextBox> textboxes = ListOfTextBoxFromControlCollection(controlsForProjectTabPage);
-            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("startDatum",   startDatumDtPikr.Value.ToString()));
-            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("endDatum", endDatumDtPikr.Value.ToString()));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("startDatum", RemoveTimeFromDateString(startDatumDtPikr.Value.ToString())));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("endDatum", RemoveTimeFromDateString(endDatumDtPikr.Value.ToString())));
             textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("ansprechpartnerID", ansprechpartnerComboBox.SelectedIndex.ToString()));
             return new Projekt(textboxes);
         }
@@ -188,6 +197,19 @@ namespace ContractApplikation
         {
             UpdateComboBoxValues();
         }
+
+        /**
+        private void BindComboBoxValues()
+        {
+            projektComboBox.DataSource      = model.ProjectList;
+            projektComboBox.DisplayMember   = "ProjektTitel";
+            projektComboBox.ValueMember     = null;
+
+            ansprechpartnerComboBox.DataSource      = model.CustomerList;
+            ansprechpartnerComboBox.DisplayMember   = "Name";
+            ansprechpartnerComboBox.ValueMember     = null;
+        }
+    **/
     
         private void UpdateComboBoxValues()
         {
@@ -217,8 +239,13 @@ namespace ContractApplikation
         {
             Projekt proj            = model.ProjektForIndex(projektComboBox.SelectedIndex);
             Ansprechpartner kunden  = model.CustomerForIndex(proj.AnsprechpartnerID);
-            DocumentManager.GenerateContractDocument("New.docx", kunden, proj);
+            DocumentManager.GenerateContractDocument(contractName.Text + ".docx", kunden, proj);
         }
 
+        private void ProjektComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Projekt proj        = model.ProjektForIndex(projektComboBox.SelectedIndex);
+            contractName.Text   = proj.ProjektTitel;
+        }
     }
 }
