@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using ContractApplikation.Src.Controller;
@@ -14,34 +13,40 @@ namespace ContractApplikation
     {
         private DataManager model;
 
+        #region Form Events
+        
+        #region Init
         public ContractDetails()
         {
             InitializeComponent();
         }
+        #endregion
 
-        private List<TextBox> ListOfTextBoxFromControlCollection(Control.ControlCollection controlsForPage)
+        #region Load Event
+        private void ContractDetails_Load(object sender, EventArgs e)
         {
-            IEnumerable<TextBox> textboxControls = controlsForPage.OfType<TextBox>();
-            return textboxControls.ToList();
+            backgrdDBWorker.RunWorkerAsync();
         }
+        #endregion
 
-        private void CreateCustomerBtnClicked(object sender, EventArgs e)
-        {
-            if (CustomerDetailIsValid())
-            {
-                var controlsForCustomerTabPage = this.Controls[0].Controls[0].Controls;
-                if (model.AddCustomer(GenerateCustomerWithControl(controlsForCustomerTabPage)))
-                {
-                    UpdateCustomerComboBox();
-                    RefreshForm();
-                }
-            }
-        }
-
+        #region Form Refresh
         private void RefreshForm()
         {
             Utilities.ClearControls(this.Controls);
         }
+        #endregion
+
+        #endregion
+
+        #region Information Generation Helper Function
+        private List<System.Windows.Forms.TextBox> ListOfTextBoxFromControlCollection(Control.ControlCollection controlsForPage)
+        {
+            IEnumerable<System.Windows.Forms.TextBox> textboxControls = controlsForPage.OfType<System.Windows.Forms.TextBox>();
+            return textboxControls.ToList();
+        }
+        #endregion
+
+        #region Customer Information Generation
 
         private Ansprechpartner GenerateCustomerWithControl(Control.ControlCollection controlsForCustomerTabPage)
         {
@@ -53,53 +58,11 @@ namespace ContractApplikation
             return (herrRadioBtn.Checked ? Salutation.HERR : Salutation.FRAU);
         }
 
-        /**
-        private void AddCustomDetailToDatabase(Ansprechpartner kunden)
-        {
-            OleDbConnection conn = new OleDbConnection();
-            conn.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=C:\Users\GRajan\source\repos\WindowsFormsApp1\WindowsFormsApp1\Vertrag-DB.accdb";
-            conn.Open();
-            var cmd = new OleDbCommand("INSERT INTO Ansprechpartner " +
-                    "(Bezeichnung, Vorname, Nachname, Abteilung, Email, Telefon, Strasse, Ort, Firma, Abteilungszusatz, Geschäftsbereich) " +
-                    "VALUES (@Bezeichnung, @Vorname, @Nachname, @Abteilung, @Email, @Telefon, @Strasse, @Ort, @Firma, @Abteilungszusatz, @Geschäftsbereich)");
-            cmd.Connection = conn;
-
-            if (conn.State == System.Data.ConnectionState.Open)
-            {
-                cmd.Parameters.Add("@Bezeichnung", OleDbType.VarChar).Value      = kunden.bezeichnung;
-                cmd.Parameters.Add("@Vorname", OleDbType.VarChar).Value          = kunden.vorname;
-                cmd.Parameters.Add("@Nachname", OleDbType.VarChar).Value         = kunden.nachname;
-                cmd.Parameters.Add("@Abteilung", OleDbType.VarChar).Value        = kunden.abteilung;
-                cmd.Parameters.Add("@Email", OleDbType.VarChar).Value            = kunden.email;
-                cmd.Parameters.Add("@Telefon", OleDbType.VarChar).Value          = kunden.telefon;
-                cmd.Parameters.Add("@Strasse", OleDbType.VarChar).Value          = kunden.strasse;
-                cmd.Parameters.Add("@Ort", OleDbType.VarChar).Value              = kunden.ort;
-                cmd.Parameters.Add("@Firma", OleDbType.VarChar).Value            = kunden.firma;
-                cmd.Parameters.Add("@Abteilungszusatz", OleDbType.VarChar).Value = kunden.abteilungszusatz;
-                cmd.Parameters.Add("@Geschäftsbereich", OleDbType.VarChar).Value = kunden.geschäftsbereich;
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error: "+e.Message);
-                }
-                finally
-                {
-                    conn.Close();
-                }
-            }
-        }
-
-        **/
-
         private bool CustomerDetailIsValid()
         {
             var controlsForCustomerTabPage = this.Controls[0].Controls[0].Controls;
 
-            TextBox emptyItem = controlsForCustomerTabPage.OfType<TextBox>().FirstOrDefault(tb => String.IsNullOrWhiteSpace(tb.Text));
+            System.Windows.Forms.TextBox emptyItem = controlsForCustomerTabPage.OfType<System.Windows.Forms.TextBox>().FirstOrDefault(tb => String.IsNullOrWhiteSpace(tb.Text));
             if (emptyItem != null)
             {
                 MessageBox.Show("Geben Sie den " + emptyItem.Name + " ein");
@@ -116,18 +79,9 @@ namespace ContractApplikation
             return false;
         }
 
-        private void CreateProjectBtnClicked(object sender, EventArgs e)
-        {
-            if (ProjectDetailIsValid())
-            {
-                var controlsForProjectTabPage = this.Controls[0].Controls[1].Controls;
-                if (model.AddProject(GenerateProjectWithControl(controlsForProjectTabPage)))
-                {
-                    UpdateProjectComboBox();
-                    RefreshForm();
-                }
-            }
-        }
+        #endregion
+
+        #region Project Information Generation
 
         private string RemoveTimeFromDateString(string dateString)
         {
@@ -140,7 +94,7 @@ namespace ContractApplikation
 
         private Projekt GenerateProjectWithControl(Control.ControlCollection controlsForProjectTabPage)
         {
-            List<TextBox> textboxes = ListOfTextBoxFromControlCollection(controlsForProjectTabPage);
+            List<System.Windows.Forms.TextBox> textboxes = ListOfTextBoxFromControlCollection(controlsForProjectTabPage);
             textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("startDatum", RemoveTimeFromDateString(startDatumDtPikr.Value.ToString())));
             textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("endDatum", RemoveTimeFromDateString(endDatumDtPikr.Value.ToString())));
             textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("ansprechpartnerID", ansprechpartnerComboBox.SelectedIndex.ToString()));
@@ -151,7 +105,7 @@ namespace ContractApplikation
         {
             var controlsForProjectTabPage = this.Controls[0].Controls[1].Controls;
 
-            TextBox emptyItem = controlsForProjectTabPage.OfType<TextBox>().FirstOrDefault(tb => String.IsNullOrWhiteSpace(tb.Text));
+            System.Windows.Forms.TextBox emptyItem = controlsForProjectTabPage.OfType<System.Windows.Forms.TextBox>().FirstOrDefault(tb => String.IsNullOrWhiteSpace(tb.Text));
             if (emptyItem != null)
             {
                 MessageBox.Show("Geben Sie den " + emptyItem.Name + " ein");
@@ -183,34 +137,26 @@ namespace ContractApplikation
             return true;
         }
 
-        private void ContractDetails_Load(object sender, EventArgs e)
-        {
-            backgrdDBWorker.RunWorkerAsync();
-        }
+        #endregion
 
+        #region Background Worker
+
+        #region Do Work
         private void BackgrdDBWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             model = new DataManager();
         }
+        #endregion
 
+        #region Completion
         private void BackgrdDBWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             UpdateComboBoxValues();
         }
+        #endregion
 
-        /**
-        private void BindComboBoxValues()
-        {
-            projektComboBox.DataSource      = model.ProjectList;
-            projektComboBox.DisplayMember   = "ProjektTitel";
-            projektComboBox.ValueMember     = null;
+        #region Update ComboBoxes
 
-            ansprechpartnerComboBox.DataSource      = model.CustomerList;
-            ansprechpartnerComboBox.DisplayMember   = "Name";
-            ansprechpartnerComboBox.ValueMember     = null;
-        }
-    **/
-    
         private void UpdateComboBoxValues()
         {
             UpdateCustomerComboBox();
@@ -235,17 +181,71 @@ namespace ContractApplikation
             }
         }
 
-        private void GenerateContractButtonClicked(object sender, EventArgs e)
-        {
-            Projekt proj            = model.ProjektForIndex(projektComboBox.SelectedIndex);
-            Ansprechpartner kunden  = model.CustomerForIndex(proj.AnsprechpartnerID);
-            DocumentManager.GenerateContractDocument(contractName.Text + ".docx", kunden, proj);
-        }
+        #endregion
 
+        #endregion
+
+        #region UI Interactions
+
+        #region Project Combobox Selection
         private void ProjektComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Projekt proj        = model.ProjektForIndex(projektComboBox.SelectedIndex);
             contractName.Text   = proj.ProjektTitel;
         }
+        #endregion
+
+        #region TabPage Selection
+        private void TabPage_Selected(object sender, TabControlEventArgs e)
+        {
+            if ((sender as TabControl).SelectedTab.Name.Equals("ProjektkostenTabelle"))
+            {
+                
+            }
+        }
+
+        
+        #endregion
+
+        #region Button Click Events
+
+        private void CreateCustomerButtonClicked(object sender, EventArgs e)
+        {
+            if (CustomerDetailIsValid())
+            {
+                var controlsForCustomerTabPage = this.Controls[0].Controls[0].Controls;
+                if (model.AddCustomer(GenerateCustomerWithControl(controlsForCustomerTabPage)))
+                {
+                    UpdateCustomerComboBox();
+                    RefreshForm();
+                }
+            }
+        }
+
+
+        private void CreateProjectButtonClicked(object sender, EventArgs e)
+        {
+            if (ProjectDetailIsValid())
+            {
+                var controlsForProjectTabPage = this.Controls[0].Controls[1].Controls;
+                if (model.AddProject(GenerateProjectWithControl(controlsForProjectTabPage)))
+                {
+                    UpdateProjectComboBox();
+                    RefreshForm();
+                }
+            }
+        }
+
+
+        private void CreateContractButtonClicked(object sender, EventArgs e)
+        {
+            Projekt proj = model.ProjektForIndex(projektComboBox.SelectedIndex);
+            Ansprechpartner kunden = model.CustomerForIndex(proj.AnsprechpartnerID);
+            DocumentManager.GenerateContractDocument(contractName.Text + ".docx", kunden, proj);
+        }
+
+        #endregion
+
+        #endregion
     }
 }

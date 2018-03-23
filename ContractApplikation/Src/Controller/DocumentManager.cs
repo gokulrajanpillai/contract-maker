@@ -3,6 +3,8 @@ using ContractApplikation.Src.Helper;
 using ContractApplikation.Src.Model;
 using Spire.Doc;
 using Spire.Doc.Documents;
+using Spire.Doc.Fields;
+using Spire.Xls;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -11,9 +13,9 @@ namespace ContractApplikation.Src.Controller
 {
     public class DocumentManager
     {
-        public static bool includeCostTable  = false;
+        public static bool includeCostTable  = true;
 
-        private static readonly FileFormat DocumentFormat = FileFormat.Docx;
+        private static readonly Spire.Doc.FileFormat DocumentFormat = Spire.Doc.FileFormat.Docx;
 
         private static string PrototypeDocumentPath()
         {
@@ -39,7 +41,7 @@ namespace ContractApplikation.Src.Controller
             Paragraph para = section.AddParagraph();
             para.AppendText("Created my first document!");
             MessageBox.Show("Directory: " + Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\CreatedWordDocument.docx");
-            doc.SaveToFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\CreatedWordDocument.docx", FileFormat.Docx);
+            doc.SaveToFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\CreatedWordDocument.docx", DocumentFormat);
         }
 
         public static void DisplayDocumentWithName(string name)
@@ -69,9 +71,82 @@ namespace ContractApplikation.Src.Controller
             Document doc = LoadDocument(PrototypeDocumentPath());
             ReplaceCustomerPlaceholders(ref doc, Kunden);
             ReplaceProjektPlaceholders(ref doc, Projekt);
+            AddProjectCostTable(ref doc);
+
             SaveDocument(doc, NameOfDocument);
             MessageBox.Show("File processed and saved successfully");
             OpenDocument(NameOfDocument);
+        }
+
+        private static void AddProjectCostTable(ref Document doc)
+        {
+            // Load the workbook in the WebBrowser control
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile(Constants.FileLocation.PROTOTYPE_COSTTABLE);
+            Worksheet sheet = workbook.Worksheets[0];
+
+            Section section = doc.Sections[0];
+            TextSelection selection = doc.FindString("[Projekt_TabelleKosten]", true, true);
+            TextRange range = selection.GetAsOneRange();
+            Paragraph paragraph = range.OwnerParagraph;
+            Body body = paragraph.OwnerTextBody;
+            int index = body.ChildObjects.IndexOf(paragraph);
+
+            Table table = section.AddTable(true);
+            table.ResetCells(sheet.LastRow, sheet.LastColumn);
+
+            //Traverse the rows and columns of table in worksheet and get the cells, call a custom function CopyStyle() to copy the font style and cell style from Excel to Word table. 
+            for (int r = 1; r <= sheet.LastRow; r++)
+            {
+                for (int c = 1; c <= sheet.LastColumn; c++)
+                {
+                    CellRange xCell = sheet.Range[r, c];
+                    TableCell wCell = table.Rows[r - 1].Cells[c - 1];
+                    //Fill data to Word table 
+                    TextRange textRange = wCell.AddParagraph().AppendText(xCell.NumberText);
+                    //Copy the formatting of table to Word 
+                    CopyStyle(textRange, xCell, wCell);
+
+                }
+            }
+            //Set column width of Word table in Word 
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                for (int j = 0; j < table.Rows[i].Cells.Count; j++)
+                {
+                    table.Rows[i].Cells[j].Width = 100f;
+                }
+            }
+            table.IndentFromLeft = paragraph.Format.LeftIndent;
+
+            body.ChildObjects.Remove(paragraph);
+            body.ChildObjects.Insert(index, table);
+        }
+
+        //The custom function CopyStyle() is defined as below 
+        private static void CopyStyle(TextRange wTextRange, CellRange xCell, TableCell wCell)
+        {
+            //Copy font style 
+            wTextRange.CharacterFormat.TextColor = xCell.Style.Font.Color;
+            wTextRange.CharacterFormat.FontSize = (float)xCell.Style.Font.Size;
+            wTextRange.CharacterFormat.FontName = xCell.Style.Font.FontName;
+            wTextRange.CharacterFormat.Bold = xCell.Style.Font.IsBold;
+            wTextRange.CharacterFormat.Italic = xCell.Style.Font.IsItalic;
+            //Copy backcolor 
+            wCell.CellFormat.BackColor = xCell.Style.Color;
+            //Copy text alignment 
+            switch (xCell.HorizontalAlignment)
+            {
+                case HorizontalAlignType.Left:
+                    wTextRange.OwnerParagraph.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Left;
+                    break;
+                case HorizontalAlignType.Center:
+                    wTextRange.OwnerParagraph.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Center;
+                    break;
+                case HorizontalAlignType.Right:
+                    wTextRange.OwnerParagraph.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Right;
+                    break;
+            }
         }
 
         private static void OpenDocument(string NameOfDocument)

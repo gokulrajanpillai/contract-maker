@@ -79,16 +79,19 @@
             this.startDatumLbl = new System.Windows.Forms.Label();
             this.projektnummer = new System.Windows.Forms.TextBox();
             this.projektnummerLbl = new System.Windows.Forms.Label();
+            this.ProjektkostenTabelle = new System.Windows.Forms.TabPage();
+            this.excelBrowser = new System.Windows.Forms.WebBrowser();
             this.Angebot = new System.Windows.Forms.TabPage();
+            this.contractNameLbl = new System.Windows.Forms.Label();
+            this.contractName = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.projektComboBox = new System.Windows.Forms.ComboBox();
             this.backgrdDBWorker = new System.ComponentModel.BackgroundWorker();
-            this.contractName = new System.Windows.Forms.TextBox();
-            this.contractNameLbl = new System.Windows.Forms.Label();
             this.ContractGenerator.SuspendLayout();
             this.Ansprechpartner.SuspendLayout();
             this.Projekt.SuspendLayout();
+            this.ProjektkostenTabelle.SuspendLayout();
             this.Angebot.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,12 +99,14 @@
             // 
             this.ContractGenerator.Controls.Add(this.Ansprechpartner);
             this.ContractGenerator.Controls.Add(this.Projekt);
+            this.ContractGenerator.Controls.Add(this.ProjektkostenTabelle);
             this.ContractGenerator.Controls.Add(this.Angebot);
             this.ContractGenerator.Location = new System.Drawing.Point(12, 12);
             this.ContractGenerator.Name = "ContractGenerator";
             this.ContractGenerator.SelectedIndex = 0;
             this.ContractGenerator.Size = new System.Drawing.Size(955, 523);
             this.ContractGenerator.TabIndex = 0;
+            this.ContractGenerator.Selected += new System.Windows.Forms.TabControlEventHandler(this.TabPage_Selected);
             // 
             // Ansprechpartner
             // 
@@ -162,7 +167,7 @@
             this.createCustomerBtn.TabIndex = 22;
             this.createCustomerBtn.Text = "Neu Kunden erstellen";
             this.createCustomerBtn.UseVisualStyleBackColor = true;
-            this.createCustomerBtn.Click += new System.EventHandler(this.CreateCustomerBtnClicked);
+            this.createCustomerBtn.Click += new System.EventHandler(this.CreateCustomerButtonClicked);
             // 
             // PLZ
             // 
@@ -331,13 +336,13 @@
             this.frauRadioBtn.Name = "frauRadioBtn";
             this.frauRadioBtn.Size = new System.Drawing.Size(46, 17);
             this.frauRadioBtn.TabIndex = 1;
-            this.frauRadioBtn.TabStop = true;
             this.frauRadioBtn.Text = "Frau";
             this.frauRadioBtn.UseVisualStyleBackColor = true;
             // 
             // herrRadioBtn
             // 
             this.herrRadioBtn.AutoSize = true;
+            this.herrRadioBtn.Checked = true;
             this.herrRadioBtn.Location = new System.Drawing.Point(97, 94);
             this.herrRadioBtn.Name = "herrRadioBtn";
             this.herrRadioBtn.Size = new System.Drawing.Size(45, 17);
@@ -419,7 +424,7 @@
             this.createProjectBtn.TabIndex = 23;
             this.createProjectBtn.Text = "Neu Projekt erstellen";
             this.createProjectBtn.UseVisualStyleBackColor = true;
-            this.createProjectBtn.Click += new System.EventHandler(this.CreateProjectBtnClicked);
+            this.createProjectBtn.Click += new System.EventHandler(this.CreateProjectButtonClicked);
             // 
             // ansprechpartnerComboBox
             // 
@@ -569,6 +574,25 @@
             this.projektnummerLbl.TabIndex = 0;
             this.projektnummerLbl.Text = "Projectnummer";
             // 
+            // ProjektkostenTabelle
+            // 
+            this.ProjektkostenTabelle.Controls.Add(this.excelBrowser);
+            this.ProjektkostenTabelle.Location = new System.Drawing.Point(4, 22);
+            this.ProjektkostenTabelle.Name = "ProjektkostenTabelle";
+            this.ProjektkostenTabelle.Size = new System.Drawing.Size(947, 497);
+            this.ProjektkostenTabelle.TabIndex = 3;
+            this.ProjektkostenTabelle.Text = "Projektkosten Tabelle";
+            this.ProjektkostenTabelle.UseVisualStyleBackColor = true;
+            // 
+            // excelBrowser
+            // 
+            this.excelBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.excelBrowser.Location = new System.Drawing.Point(0, 0);
+            this.excelBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.excelBrowser.Name = "excelBrowser";
+            this.excelBrowser.Size = new System.Drawing.Size(947, 497);
+            this.excelBrowser.TabIndex = 0;
+            // 
             // Angebot
             // 
             this.Angebot.Controls.Add(this.contractNameLbl);
@@ -583,6 +607,22 @@
             this.Angebot.Text = "Angebot Generieren";
             this.Angebot.UseVisualStyleBackColor = true;
             // 
+            // contractNameLbl
+            // 
+            this.contractNameLbl.AutoSize = true;
+            this.contractNameLbl.Location = new System.Drawing.Point(164, 148);
+            this.contractNameLbl.Name = "contractNameLbl";
+            this.contractNameLbl.Size = new System.Drawing.Size(169, 13);
+            this.contractNameLbl.TabIndex = 4;
+            this.contractNameLbl.Text = "Vertragsname (ohne Dateiendung)";
+            // 
+            // contractName
+            // 
+            this.contractName.Location = new System.Drawing.Point(368, 145);
+            this.contractName.Name = "contractName";
+            this.contractName.Size = new System.Drawing.Size(469, 20);
+            this.contractName.TabIndex = 3;
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(309, 238);
@@ -591,7 +631,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Angebot generieren";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.GenerateContractButtonClicked);
+            this.button1.Click += new System.EventHandler(this.CreateContractButtonClicked);
             // 
             // label1
             // 
@@ -617,22 +657,6 @@
             this.backgrdDBWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgrdDBWorker_DoWork);
             this.backgrdDBWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgrdDBWorker_RunWorkerCompleted);
             // 
-            // contractName
-            // 
-            this.contractName.Location = new System.Drawing.Point(368, 145);
-            this.contractName.Name = "contractName";
-            this.contractName.Size = new System.Drawing.Size(469, 20);
-            this.contractName.TabIndex = 3;
-            // 
-            // contractNameLbl
-            // 
-            this.contractNameLbl.AutoSize = true;
-            this.contractNameLbl.Location = new System.Drawing.Point(164, 148);
-            this.contractNameLbl.Name = "contractNameLbl";
-            this.contractNameLbl.Size = new System.Drawing.Size(169, 13);
-            this.contractNameLbl.TabIndex = 4;
-            this.contractNameLbl.Text = "Vertragsname (ohne Dateiendung)";
-            // 
             // ContractDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -647,6 +671,7 @@
             this.Ansprechpartner.PerformLayout();
             this.Projekt.ResumeLayout(false);
             this.Projekt.PerformLayout();
+            this.ProjektkostenTabelle.ResumeLayout(false);
             this.Angebot.ResumeLayout(false);
             this.Angebot.PerformLayout();
             this.ResumeLayout(false);
@@ -713,6 +738,8 @@
         private System.Windows.Forms.Label KoordinatorLbl;
         private System.Windows.Forms.Label contractNameLbl;
         private System.Windows.Forms.TextBox contractName;
+        private System.Windows.Forms.TabPage ProjektkostenTabelle;
+        private System.Windows.Forms.WebBrowser excelBrowser;
     }
 }
 
