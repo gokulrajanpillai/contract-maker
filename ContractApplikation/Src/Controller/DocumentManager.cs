@@ -11,6 +11,8 @@ namespace ContractApplikation.Src.Controller
 {
     public class DocumentManager
     {
+        public static bool includeCostTable  = false;
+
         private static readonly FileFormat DocumentFormat = FileFormat.Docx;
 
         private static string PrototypeDocumentPath()
@@ -68,8 +70,8 @@ namespace ContractApplikation.Src.Controller
             ReplaceCustomerPlaceholders(ref doc, Kunden);
             ReplaceProjektPlaceholders(ref doc, Projekt);
             SaveDocument(doc, NameOfDocument);
-            OpenDocument(NameOfDocument);
             MessageBox.Show("File processed and saved successfully");
+            OpenDocument(NameOfDocument);
         }
 
         private static void OpenDocument(string NameOfDocument)
@@ -97,8 +99,10 @@ namespace ContractApplikation.Src.Controller
 
         private static void ReplaceProjektPlaceholders(ref Document doc, Projekt project)
         {
-            doc.Replace("[Projekt_ProjektTitel]", project.ProjektTitel, true, true);
+            if (!includeCostTable)
+                doc.Replace("[Projekt_TabelleKosten]", "", true, false);
 
+            doc.Replace("[Projekt_ProjektTitel]", project.ProjektTitel, true, true);
             doc.Replace("[Projekt_Projektnummer]", project.Projektnummer, true, false);
             doc.Replace("[Projekt_StartDatum]", project.StartDatum, true, false);
             doc.Replace("[Projekt_EndDatum]", project.EndDatum, true, false);
