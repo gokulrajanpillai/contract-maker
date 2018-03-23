@@ -1,18 +1,17 @@
 ﻿using ContractApplikation.Src.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Windows.Forms;
 
-namespace ContractApplikation.src.helper
+namespace ContractApplikation.Src.Helper
 {
     public class OleDbHelper
     {
-        public static OleDbHelper sharedInstance = new OleDbHelper();
+        private static readonly string CONNECTION_STRING = "Provider=Microsoft.ACE.OLEDB.12.0; Data Source="+Constants.FileLocation.DATASOURCE;
 
-        private const string CONNECTION_STRING = @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=C:\Users\GRajan\source\repos\ContractApplikation\ContractApplikation\Vertrag-DB.accdb";
-
-        private OleDbConnection openConnection()
+        private static OleDbConnection OpenConnection()
         {
             OleDbConnection conn = new OleDbConnection();
             conn.ConnectionString = CONNECTION_STRING;
@@ -20,67 +19,69 @@ namespace ContractApplikation.src.helper
             return conn;
         }
 
-        private void closeConnection(OleDbConnection conn)
+        private static void CloseConnection(OleDbConnection conn)
         {
             conn.Close();
         }
 
-        private void AddCustomerDetailToDatabase(Ansprechpartner kunden, OleDbConnection conn)
+        private static void AddCustomerDetailToDatabase(Ansprechpartner kunden, OleDbConnection conn)
         {
             var cmd = new OleDbCommand("INSERT INTO Ansprechpartner " +
-                    "(Bezeichnung, Vorname, Nachname, Abteilung, Email, Telefon, Strasse, Ort, Firma, Abteilungszusatz, Geschäftsbereich) " +
-                    "VALUES (@Bezeichnung, @Vorname, @Nachname, @Abteilung, @Email, @Telefon, @Strasse, @Ort, @Firma, @Abteilungszusatz, @Geschäftsbereich)");
+                    "(Anrede, Vorname, Nachname, Abteilung, Email, Telefon, Strasse, PLZ, Ort, Firma, Abteilungszusatz, Geschäftsbereich) " +
+                    "VALUES (@Anrede, @Vorname, @Nachname, @Abteilung, @Email, @Telefon, @Strasse, @PLZ, @Ort, @Firma, @Abteilungszusatz, @Geschäftsbereich)");
             cmd.Connection = conn;
 
             if (cmd.Connection.State == System.Data.ConnectionState.Open)
             {
-                cmd.Parameters.Add("@Bezeichnung", OleDbType.VarChar).Value = kunden.bezeichnung;
-                cmd.Parameters.Add("@Vorname", OleDbType.VarChar).Value = kunden.vorname;
-                cmd.Parameters.Add("@Nachname", OleDbType.VarChar).Value = kunden.nachname;
-                cmd.Parameters.Add("@Abteilung", OleDbType.VarChar).Value = kunden.abteilung;
-                cmd.Parameters.Add("@Email", OleDbType.VarChar).Value = kunden.email;
-                cmd.Parameters.Add("@Telefon", OleDbType.VarChar).Value = kunden.telefon;
-                cmd.Parameters.Add("@Strasse", OleDbType.VarChar).Value = kunden.strasse;
-                cmd.Parameters.Add("@Ort", OleDbType.VarChar).Value = kunden.ort;
-                cmd.Parameters.Add("@Firma", OleDbType.VarChar).Value = kunden.firma;
-                cmd.Parameters.Add("@Abteilungszusatz", OleDbType.VarChar).Value = kunden.abteilungszusatz;
-                cmd.Parameters.Add("@Geschäftsbereich", OleDbType.VarChar).Value = kunden.geschäftsbereich;
+                cmd.Parameters.Add("@Anrede", OleDbType.VarChar).Value              = kunden.Anrede;
+                cmd.Parameters.Add("@Vorname", OleDbType.VarChar).Value             = kunden.Vorname;
+                cmd.Parameters.Add("@Nachname", OleDbType.VarChar).Value            = kunden.Nachname;
+                cmd.Parameters.Add("@Abteilung", OleDbType.VarChar).Value           = kunden.Abteilung;
+                cmd.Parameters.Add("@Email", OleDbType.VarChar).Value               = kunden.Email;
+                cmd.Parameters.Add("@Telefon", OleDbType.VarChar).Value             = kunden.Telefon;
+                cmd.Parameters.Add("@Strasse", OleDbType.VarChar).Value             = kunden.Strasse;
+                cmd.Parameters.Add("@PLZ", OleDbType.VarChar).Value                 = kunden.PLZ;
+                cmd.Parameters.Add("@Ort", OleDbType.VarChar).Value                 = kunden.Ort;
+                cmd.Parameters.Add("@Firma", OleDbType.VarChar).Value               = kunden.Firma;
+                cmd.Parameters.Add("@Abteilungszusatz", OleDbType.VarChar).Value    = kunden.Abteilungszusatz;
+                cmd.Parameters.Add("@Geschäftsbereich", OleDbType.VarChar).Value    = kunden.Geschäftsbereich;
                 cmd.ExecuteNonQuery();
-                MessageBox.Show("Customer details of " + kunden.vorname + " is successfully entered to the database.");
+                MessageBox.Show("Customer details of " + kunden.Vorname + " is successfully entered to the database.");
             }
         }
 
-        private void AddProjectDetailToDatabase(Projekt project, OleDbConnection conn)
+        private static void AddProjectDetailToDatabase(Projekt project, OleDbConnection conn)
         {
             var cmd = new OleDbCommand("INSERT INTO Projekt " +
-                    "(Projektnummer, StartDatum, EndDatum, AnsprechpartnerID, AnzahlStunden, Verrechnungssatz, ProjektTitel, Gesprächsperson, Disponent, ProjektBeschreibung) " +
-                    "VALUES (@Projektnummer, @StartDatum, @EndDatum, @AnsprechpartnerID, @AnzahlStunden, @Verrechnungssatz, @ProjektTitel, @Gesprächsperson, @Disponent, @ProjektBeschreibung)");
+                    "(Projektnummer, StartDatum, EndDatum, AnsprechpartnerID, AnzahlStunden, Verrechnungssatz, Koordinator, Gesprächsperson, Disponent, ProjektTitel, ProjektBeschreibung) " +
+                    "VALUES (@Projektnummer, @StartDatum, @EndDatum, @AnsprechpartnerID, @AnzahlStunden, @Verrechnungssatz, @Koordinator, @Gesprächsperson, @Disponent, @ProjektTitel, @ProjektBeschreibung)");
             cmd.Connection = conn;
 
             if (cmd.Connection.State == System.Data.ConnectionState.Open)
             {
-                cmd.Parameters.Add("@Projektnummer", OleDbType.VarChar).Value       = project.projektNummer;
-                cmd.Parameters.Add("@StartDatum", OleDbType.VarChar).Value          = project.startDatum;
-                cmd.Parameters.Add("@EndDatum", OleDbType.VarChar).Value            = project.endDatum;
-                cmd.Parameters.Add("@AnsprechpartnerID", OleDbType.VarChar).Value   = project.ansprechPartnerID;
-                cmd.Parameters.Add("@AnzahlStunden", OleDbType.VarChar).Value       = project.anzahlStunden;
-                cmd.Parameters.Add("@Verrechnungssatz", OleDbType.VarChar).Value    = project.verrechnungssatz;
-                cmd.Parameters.Add("@ProjektTitel", OleDbType.VarChar).Value        = project.projektTitel;
-                cmd.Parameters.Add("@Gesprächsperson", OleDbType.VarChar).Value     = project.gesprächsperson;
-                cmd.Parameters.Add("@Disponent", OleDbType.VarChar).Value           = project.disponent;
-                cmd.Parameters.Add("@ProjektBeschreibung", OleDbType.VarChar).Value = project.projektBeschreibung;
+                cmd.Parameters.Add("@Projektnummer", OleDbType.VarChar).Value       = project.Projektnummer;
+                cmd.Parameters.Add("@StartDatum", OleDbType.VarChar).Value          = project.StartDatum;
+                cmd.Parameters.Add("@EndDatum", OleDbType.VarChar).Value            = project.EndDatum;
+                cmd.Parameters.Add("@AnsprechpartnerID", OleDbType.Integer).Value   = project.AnsprechpartnerID;
+                cmd.Parameters.Add("@AnzahlStunden", OleDbType.Integer).Value       = project.AnzahlStunden;
+                cmd.Parameters.Add("@Verrechnungssatz", OleDbType.Integer).Value    = project.Verrechnungssatz;
+                cmd.Parameters.Add("@Koordinator", OleDbType.VarChar).Value         = project.Koordinator;
+                cmd.Parameters.Add("@Gesprächsperson", OleDbType.VarChar).Value     = project.Gesprächsperson;
+                cmd.Parameters.Add("@Disponent", OleDbType.VarChar).Value           = project.Disponent;
+                cmd.Parameters.Add("@ProjektTitel", OleDbType.VarChar).Value        = project.ProjektTitel;
+                cmd.Parameters.Add("@ProjektBeschreibung", OleDbType.VarChar).Value = project.ProjektBeschreibung;
                 cmd.ExecuteNonQuery();
-                MessageBox.Show("Project details of " + project.projektTitel + " is successfully entered to the database.");
+                MessageBox.Show("Project details of " + project.ProjektTitel + " is successfully entered to the database.");
             }
         }
 
-        public bool InsertCustomerDetail(Ansprechpartner kunden)
+        public static bool InsertCustomerDetail(Ansprechpartner kunden)
         {
             try
             {
-                OleDbConnection conn = openConnection();
+                OleDbConnection conn = OpenConnection();
                 AddCustomerDetailToDatabase(kunden, conn);
-                closeConnection(conn);
+                CloseConnection(conn);
             }
             catch(Exception e)
             {
@@ -91,13 +92,13 @@ namespace ContractApplikation.src.helper
             return true;
         }
 
-        public bool InsertProjectDetail(Projekt projekt)
+        public static bool InsertProjectDetail(Projekt projekt)
         {
             try
             {
-                OleDbConnection conn = openConnection();
+                OleDbConnection conn = OpenConnection();
                 AddProjectDetailToDatabase(projekt, conn);
-                closeConnection(conn);
+                CloseConnection(conn);
             }
             catch (Exception e)
             {
@@ -108,42 +109,71 @@ namespace ContractApplikation.src.helper
             return true;
         }
 
-        public void FetchCustomerDetails()
+        public static List<Ansprechpartner> FetchCustomerDetails()
         {
+            List<Ansprechpartner> customerList = new List<Ansprechpartner>();
+
+            OleDbConnection oleDbConnection = OpenConnection();
+            OleDbDataAdapter oledbAdapter;
+            DataSet dataSet = new DataSet();
+            DataTable dataTable;
+
             try
             {
-                List<Ansprechpartner> customerList = new List<Ansprechpartner>();
-                OleDbDataReader dr = null;
-                var cmd = new OleDbCommand("SELECT * FROM Ansprechpartner", openConnection());
-                dr = cmd.ExecuteReader();
-                while (dr.Read())
+                oledbAdapter = new OleDbDataAdapter("SELECT * FROM Ansprechpartner", oleDbConnection);
+                oledbAdapter.Fill(dataSet, "Ansprechpartner");
+                oledbAdapter.Dispose();
+
+                dataTable = dataSet.Tables[0];
+                foreach (DataRow row in dataTable.Rows)
                 {
-                    customerList.Add(new Ansprechpartner(dr));
+                    customerList.Add(new Ansprechpartner(row));
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error: " + e.Message);
+                MessageBox.Show("Can not open connection ! "+e.Message);
             }
+            finally
+            {
+                CloseConnection(oleDbConnection);
+            }
+
+            return customerList;
         }
 
-        public void FetchProjectDetails()
+        
+        public static List<Projekt> FetchProjectDetails()
         {
+            List<Projekt> projektList = new List<Projekt>();
+
+            OleDbConnection oleDbConnection = OpenConnection();
+            OleDbDataAdapter oledbAdapter;
+            DataSet dataSet = new DataSet();
+            DataTable dataTable;
+
             try
             {
-                List<Projekt> projectList = new List<Projekt>();
-                OleDbDataReader dr = null;
-                var cmd = new OleDbCommand("SELECT * FROM Projekt", openConnection());
-                dr = cmd.ExecuteReader();
-                while (dr.Read())
+                oledbAdapter = new OleDbDataAdapter("SELECT * FROM Projekt", oleDbConnection);
+                oledbAdapter.Fill(dataSet, "Projekt");
+                oledbAdapter.Dispose();
+
+                dataTable = dataSet.Tables[0];
+                foreach (DataRow row in dataTable.Rows)
                 {
-                    projectList.Add(new Projekt(dr));
+                    projektList.Add(new Projekt(row));
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error: " + e.Message);
+                MessageBox.Show("Can not open connection ! "+e.Message);
             }
+            finally
+            {
+                CloseConnection(oleDbConnection);
+            }
+
+            return projektList;
         }
     }
 }

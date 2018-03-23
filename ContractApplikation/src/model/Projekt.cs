@@ -1,51 +1,105 @@
-﻿using System;
+﻿using ContractApplikation.Src.Helper;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ContractApplikation.Src.Model
 {
     public class Projekt
     {
-        public String projektNummer { get; private set; }
+        public String Projektnummer { get; private set; }
 
-        public String startDatum { get; private set; }
+        public String StartDatum { get; private set; }
 
-        public String endDatum { get; private set; }
+        public String EndDatum { get; private set; }
 
-        public String ansprechPartnerID { get; private set; }
+        public Int32 AnsprechpartnerID { get; private set; }
 
-        public String anzahlStunden { get; private set; }
+        public Int32 AnzahlStunden { get; private set; }
 
-        public String verrechnungssatz { get; private set; }
+        public Int32 Verrechnungssatz { get; private set; }
 
-        public String projektTitel { get; private set; }
+        public String ProjektTitel { get; private set; }
 
-        public String gesprächsperson { get; private set; }
+        public String Koordinator { get; private set; }
 
-        public String disponent { get; private set; }
+        public String Gesprächsperson { get; private set; }
 
-        public String projektBeschreibung { get; private set; }
+        public String Disponent { get; private set; }
 
-        public Projekt(Control.ControlCollection collection)
+        public String ProjektBeschreibung { get; private set; }
+
+        // Custom property: not part of the database
+        public String Einzelpreis
         {
-            foreach (Control control in collection)
+            get
             {
-                this.GetType().GetProperty(control.Name).SetValue(this, control.Text);
+                decimal payment = Verrechnungssatz;
+                return Utilities.AddCurrencySymbol(decimal.Round(payment, 2, MidpointRounding.AwayFromZero).ToString());
+            }
+        }
+
+        // Custom property: not part of the database
+        public String AngebotSumme
+        {
+            get
+            {
+                decimal hours = AnzahlStunden;
+                decimal payment = Verrechnungssatz;
+                decimal sum = hours * payment;
+                return Utilities.AddCurrencySymbol(decimal.Round(sum, 2, MidpointRounding.AwayFromZero).ToString());
+            }
+        }
+
+        public Projekt(List<TextBox> listOfTextboxes)
+        {
+            foreach (TextBox textBox in listOfTextboxes)
+            {
+                PropertyInfo property = this.GetType().GetProperty(Utilities.FirstLetterToUpperCase(textBox.Name));
+
+                if (property.PropertyType == typeof(Int32))
+                {
+                    property.SetValue(this, int.Parse(textBox.Text));
+                }
+                else
+                {
+                    property.SetValue(this, textBox.Text);
+                }
             }
         }
 
         public Projekt(OleDbDataReader dataReader)
         {
-            this.projektNummer = dataReader.GetValue(1).ToString();
-            this.startDatum = dataReader.GetValue(2).ToString();
-            this.endDatum = dataReader.GetValue(3).ToString();
-            this.ansprechPartnerID = dataReader.GetValue(4).ToString();
-            this.anzahlStunden = dataReader.GetValue(5).ToString();
-            this.verrechnungssatz = dataReader.GetValue(6).ToString();
-            this.projektTitel = dataReader.GetValue(7).ToString();
-            this.gesprächsperson = dataReader.GetValue(8).ToString();
-            this.disponent = dataReader.GetValue(9).ToString();
-            this.projektBeschreibung = dataReader.GetValue(10).ToString();
+            this.Projektnummer = dataReader.GetValue(1).ToString();
+            this.StartDatum = dataReader.GetValue(2).ToString();
+            this.EndDatum = dataReader.GetValue(3).ToString();
+            this.AnsprechpartnerID = dataReader.GetInt32(4);
+            this.AnzahlStunden = dataReader.GetInt32(5);
+            this.Verrechnungssatz = dataReader.GetInt32(6);
+            this.Koordinator = dataReader.GetValue(11).ToString();
+            this.Gesprächsperson = dataReader.GetValue(8).ToString();
+            this.Disponent = dataReader.GetValue(9).ToString();
+            this.ProjektTitel = dataReader.GetValue(7).ToString();
+            this.ProjektBeschreibung = dataReader.GetValue(10).ToString();
+        }
+
+
+        public Projekt(DataRow dataRow)
+        {
+            this.Projektnummer = dataRow["Projektnummer"].ToString();
+            this.StartDatum = dataRow["StartDatum"].ToString();
+            this.EndDatum = dataRow["EndDatum"].ToString();
+            this.AnsprechpartnerID = Int32.Parse(dataRow["AnsprechpartnerID"].ToString());
+            this.AnzahlStunden = Int32.Parse(dataRow["AnzahlStunden"].ToString());
+            this.Verrechnungssatz = Int32.Parse(dataRow["Verrechnungssatz"].ToString());
+            this.Koordinator = dataRow["Koordinator"].ToString();
+            this.Gesprächsperson = dataRow["Gesprächsperson"].ToString();
+            this.Disponent = dataRow["Disponent"].ToString();
+            this.ProjektTitel = dataRow["ProjektTitel"].ToString();
+            this.ProjektBeschreibung = dataRow["ProjektBeschreibung"].ToString();
         }
     }
 }

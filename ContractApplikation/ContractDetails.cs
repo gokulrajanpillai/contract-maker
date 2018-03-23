@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
-using ContractApplikation.src.helper;
+using ContractApplikation.Src.Controller;
+using ContractApplikation.Src.Helper;
 using ContractApplikation.Src.Model;
 
 namespace ContractApplikation
@@ -11,36 +12,49 @@ namespace ContractApplikation
 
     public partial class ContractDetails : Form
     {
+        private DataManager model;
 
         public ContractDetails()
         {
             InitializeComponent();
         }
 
-
-        private void createCustomer_Click(object sender, EventArgs e)
+        private List<TextBox> ListOfTextBoxFromControlCollection(Control.ControlCollection controlsForPage)
         {
-            if (customerDetailIsValid())
+            IEnumerable<TextBox> textboxControls = controlsForPage.OfType<TextBox>();
+            return textboxControls.ToList();
+        }
+
+        private void CreateCustomerBtnClicked(object sender, EventArgs e)
+        {
+            if (CustomerDetailIsValid())
             {
                 var controlsForCustomerTabPage = this.Controls[0].Controls[0].Controls;
-                Ansprechpartner kunden = generateCustomerWithControl(controlsForCustomerTabPage);
-                addCustomDetailToDatabase(kunden);
+                if (model.AddCustomer(GenerateCustomerWithControl(controlsForCustomerTabPage)))
+                {
+                    UpdateCustomerComboBox();
+                    RefreshForm();
+                }
             }
         }
 
-        private Ansprechpartner generateCustomerWithControl(Control.ControlCollection controlsForCustomerTabPage)
+        private void RefreshForm()
         {
-            IEnumerable<TextBox> textboxControls = controlsForCustomerTabPage.OfType<TextBox>();
-            List<TextBox> listOfTextboxes = textboxControls.ToList();
-            return new Ansprechpartner(listOfTextboxes, getHonorificsForCustomer());
+            Utilities.ClearControls(this.Controls);
         }
 
-        private Honorifics getHonorificsForCustomer()
+        private Ansprechpartner GenerateCustomerWithControl(Control.ControlCollection controlsForCustomerTabPage)
         {
-            return (herrRadioBtn.Checked ? Honorifics.HERR : Honorifics.FRAU);
+            return new Ansprechpartner(ListOfTextBoxFromControlCollection(controlsForCustomerTabPage), GetSalutationForCustomer());
         }
 
-        private void addCustomDetailToDatabase(Ansprechpartner kunden)
+        private Salutation GetSalutationForCustomer()
+        {
+            return (herrRadioBtn.Checked ? Salutation.HERR : Salutation.FRAU);
+        }
+
+        /**
+        private void AddCustomDetailToDatabase(Ansprechpartner kunden)
         {
             OleDbConnection conn = new OleDbConnection();
             conn.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=C:\Users\GRajan\source\repos\WindowsFormsApp1\WindowsFormsApp1\Vertrag-DB.accdb";
@@ -79,8 +93,9 @@ namespace ContractApplikation
             }
         }
 
+        **/
 
-        private bool customerDetailIsValid()
+        private bool CustomerDetailIsValid()
         {
             var controlsForCustomerTabPage = this.Controls[0].Controls[0].Controls;
 
@@ -101,19 +116,136 @@ namespace ContractApplikation
             return false;
         }
 
-        private void createProjectBtn_Click(object sender, EventArgs e)
+        private void CreateProjectBtnClicked(object sender, EventArgs e)
         {
+            if (ProjectDetailIsValid())
+            {
+                var controlsForProjectTabPage = this.Controls[0].Controls[1].Controls;
+                if (model.AddProject(GenerateProjectWithControl(controlsForProjectTabPage)))
+                {
+                    UpdateProjectComboBox();
+                    RefreshForm();
+                }
+            }
+        }
 
+        private string RemoveTimeFromDateString(string dateString)
+        {
+            string finalString = dateString;
+            if (dateString.Contains(" "))
+                finalString = dateString.Substring(0, dateString.IndexOf(' '));
+
+            return finalString;
+        }
+
+        private Projekt GenerateProjectWithControl(Control.ControlCollection controlsForProjectTabPage)
+        {
+            List<TextBox> textboxes = ListOfTextBoxFromControlCollection(controlsForProjectTabPage);
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("startDatum", RemoveTimeFromDateString(startDatumDtPikr.Value.ToString())));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("endDatum", RemoveTimeFromDateString(endDatumDtPikr.Value.ToString())));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("ansprechpartnerID", ansprechpartnerComboBox.SelectedIndex.ToString()));
+            return new Projekt(textboxes);
+        }
+
+        private bool ProjectDetailIsValid()
+        {
+            var controlsForProjectTabPage = this.Controls[0].Controls[1].Controls;
+
+            TextBox emptyItem = controlsForProjectTabPage.OfType<TextBox>().FirstOrDefault(tb => String.IsNullOrWhiteSpace(tb.Text));
+            if (emptyItem != null)
+            {
+                MessageBox.Show("Geben Sie den " + emptyItem.Name + " ein");
+                return false;
+            }
+            else
+            {
+                return AreProjectDatesValid();
+            }
+        }
+
+        private bool AreProjectDatesValid()
+        {
+            if (startDatumDtPikr.Text == null || endDatumDtPikr.Text == null)
+            {
+                return false;
+            }
+            else if (startDatumDtPikr.Value > endDatumDtPikr.Value)
+            {
+                MessageBox.Show("Startdatum sollte nach Enddatum sein");
+                return false;
+            }
+            else if (startDatumDtPikr.Value == endDatumDtPikr.Value)
+            {
+                MessageBox.Show("Startdatum und Enddatum können nicht identisch sein");
+                return false;
+            }
+
+            return true;
         }
 
         private void ContractDetails_Load(object sender, EventArgs e)
         {
-            OleDbHelper helper = OleDbHelper.sharedInstance;
+            backgrdDBWorker.RunWorkerAsync();
+        }
 
-            helper.FetchProjectDetails();
+        private void BackgrdDBWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            model = new DataManager();
+        }
 
-            helper.FetchCustomerDetails();
+        private void BackgrdDBWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            UpdateComboBoxValues();
+        }
 
+        /**
+        private void BindComboBoxValues()
+        {
+            projektComboBox.DataSource      = model.ProjectList;
+            projektComboBox.DisplayMember   = "ProjektTitel";
+            projektComboBox.ValueMember     = null;
+
+            ansprechpartnerComboBox.DataSource      = model.CustomerList;
+            ansprechpartnerComboBox.DisplayMember   = "Name";
+            ansprechpartnerComboBox.ValueMember     = null;
+        }
+    **/
+    
+        private void UpdateComboBoxValues()
+        {
+            UpdateCustomerComboBox();
+            UpdateProjectComboBox();
+        }
+
+        private void UpdateProjectComboBox()
+        {
+            projektComboBox.Items.Clear();
+            foreach (Projekt proj in model.ProjectList)
+            {
+                projektComboBox.Items.Add(new CustomComboBoxItem(proj.ProjektTitel, proj));
+            }
+        }
+
+        private void UpdateCustomerComboBox()
+        {
+            ansprechpartnerComboBox.Items.Clear();
+            foreach (Ansprechpartner cust in model.CustomerList)
+            {
+                ansprechpartnerComboBox.Items.Add(new CustomComboBoxItem(cust.Name, model.CustomerList.IndexOf(cust)));
+            }
+        }
+
+        private void GenerateContractButtonClicked(object sender, EventArgs e)
+        {
+            Projekt proj            = model.ProjektForIndex(projektComboBox.SelectedIndex);
+            Ansprechpartner kunden  = model.CustomerForIndex(proj.AnsprechpartnerID);
+            DocumentManager.GenerateContractDocument(contractName.Text + ".docx", kunden, proj);
+        }
+
+        private void ProjektComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Projekt proj        = model.ProjektForIndex(projektComboBox.SelectedIndex);
+            contractName.Text   = proj.ProjektTitel;
         }
     }
 }
