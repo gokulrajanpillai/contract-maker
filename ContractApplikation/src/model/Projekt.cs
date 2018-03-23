@@ -72,17 +72,28 @@ namespace ContractApplikation.Src.Model
 
         public Projekt(OleDbDataReader dataReader)
         {
-            this.Projektnummer          = dataReader.GetValue(1).ToString();
-            this.StartDatum             = dataReader.GetValue(2).ToString();
-            this.EndDatum               = dataReader.GetValue(3).ToString();
-            this.AnsprechpartnerID      = dataReader.GetInt32(4);
-            this.AnzahlStunden          = dataReader.GetInt32(5);
-            this.Verrechnungssatz       = dataReader.GetInt32(6);
-            this.Koordinator            = dataReader.GetValue(7).ToString();
-            this.Gesprächsperson        = dataReader.GetValue(8).ToString();
-            this.Disponent              = dataReader.GetValue(9).ToString();
-            this.ProjektTitel           = dataReader.GetValue(10).ToString();
-            this.ProjektBeschreibung    = dataReader.GetValue(11).ToString();
+            this.Projektnummer = dataReader.GetValue(1).ToString();
+            this.StartDatum = dataReader.GetValue(2).ToString();
+            this.StartDatum = RemoveTimeFromDateString(StartDatum);
+            this.EndDatum = dataReader.GetValue(3).ToString();
+            this.EndDatum = RemoveTimeFromDateString(EndDatum);
+            this.AnsprechpartnerID = dataReader.GetInt32(4);
+            this.AnzahlStunden = dataReader.GetInt32(5);
+            this.Verrechnungssatz = dataReader.GetInt32(6);
+            this.Koordinator = dataReader.GetValue(11).ToString();
+            this.Gesprächsperson = dataReader.GetValue(8).ToString();
+            this.Disponent = dataReader.GetValue(9).ToString();
+            this.ProjektTitel = dataReader.GetValue(7).ToString();
+            this.ProjektBeschreibung = dataReader.GetValue(10).ToString();
+        }
+
+        private string RemoveTimeFromDateString(string dateString)
+        {
+            string finalString = dateString;
+            if (dateString.Contains(" "))
+                finalString = dateString.Substring(0, dateString.IndexOf(' '));
+
+            return finalString;
         }
     }
 }

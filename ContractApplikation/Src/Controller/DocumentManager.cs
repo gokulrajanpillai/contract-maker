@@ -3,6 +3,7 @@ using ContractApplikation.Src.Helper;
 using ContractApplikation.Src.Model;
 using Spire.Doc;
 using Spire.Doc.Documents;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -67,7 +68,13 @@ namespace ContractApplikation.Src.Controller
             ReplaceCustomerPlaceholders(ref doc, Kunden);
             ReplaceProjektPlaceholders(ref doc, Projekt);
             SaveDocument(doc, NameOfDocument);
+            OpenDocument(NameOfDocument);
             MessageBox.Show("File processed and saved successfully");
+        }
+
+        private static void OpenDocument(string NameOfDocument)
+        {
+            Process.Start(Constants.FileLocation.OutputFilePath(NameOfDocument));
         }
 
         private static void ReplaceCustomerPlaceholders(ref Document doc, Ansprechpartner kunden)
@@ -90,6 +97,8 @@ namespace ContractApplikation.Src.Controller
 
         private static void ReplaceProjektPlaceholders(ref Document doc, Projekt project)
         {
+            doc.Replace("[Projekt_ProjektTitel]", project.ProjektTitel, true, true);
+
             doc.Replace("[Projekt_Projektnummer]", project.Projektnummer, true, false);
             doc.Replace("[Projekt_StartDatum]", project.StartDatum, true, false);
             doc.Replace("[Projekt_EndDatum]", project.EndDatum, true, false);
@@ -97,7 +106,6 @@ namespace ContractApplikation.Src.Controller
             doc.Replace("[Projekt_Verrechnungssatz]", project.Verrechnungssatz.ToString(), true, false);
             doc.Replace("[Projekt_Einzelpreis]", project.Einzelpreis, true, false);
             doc.Replace("[Projekt_AngebotSumme]", project.AngebotSumme, true, false);
-            doc.Replace("[Projekt_ProjektTitel]", project.ProjektTitel, true, false);
             doc.Replace("[Projekt_Koordinator]", project.Koordinator, true, false);
             doc.Replace("[Projekt_Gesprächsperson]", project.Gesprächsperson, true, false);
             doc.Replace("[Projekt_Disponent]", project.Disponent, true, false);
