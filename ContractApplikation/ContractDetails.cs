@@ -242,5 +242,10 @@ namespace ContractApplikation
             DocumentManager.GenerateContractDocument(contractName.Text + ".docx", kunden, proj);
         }
 
+        private void ProjektComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Projekt proj        = model.ProjektForIndex(projektComboBox.SelectedIndex);
+            contractName.Text   = proj.ProjektTitel;
+        }
     }
 }

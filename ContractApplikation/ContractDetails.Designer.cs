@@ -56,7 +56,7 @@
             this.frauRadioBtn = new System.Windows.Forms.RadioButton();
             this.herrRadioBtn = new System.Windows.Forms.RadioButton();
             this.Projekt = new System.Windows.Forms.TabPage();
-            this.Koordinator = new System.Windows.Forms.TextBox();
+            this.koordinator = new System.Windows.Forms.TextBox();
             this.KoordinatorLbl = new System.Windows.Forms.Label();
             this.projektTitel = new System.Windows.Forms.TextBox();
             this.projektTitelLbl = new System.Windows.Forms.Label();
@@ -348,7 +348,7 @@
             // 
             // Projekt
             // 
-            this.Projekt.Controls.Add(this.Koordinator);
+            this.Projekt.Controls.Add(this.koordinator);
             this.Projekt.Controls.Add(this.KoordinatorLbl);
             this.Projekt.Controls.Add(this.projektTitel);
             this.Projekt.Controls.Add(this.projektTitelLbl);
@@ -379,12 +379,12 @@
             this.Projekt.Text = "Projekt Erstellen";
             this.Projekt.UseVisualStyleBackColor = true;
             // 
-            // Koordinator
+            // koordinator
             // 
-            this.Koordinator.Location = new System.Drawing.Point(169, 332);
-            this.Koordinator.Name = "Koordinator";
-            this.Koordinator.Size = new System.Drawing.Size(200, 20);
-            this.Koordinator.TabIndex = 27;
+            this.koordinator.Location = new System.Drawing.Point(169, 332);
+            this.koordinator.Name = "koordinator";
+            this.koordinator.Size = new System.Drawing.Size(200, 20);
+            this.koordinator.TabIndex = 27;
             // 
             // KoordinatorLbl
             // 
@@ -610,6 +610,7 @@
             this.projektComboBox.Name = "projektComboBox";
             this.projektComboBox.Size = new System.Drawing.Size(469, 21);
             this.projektComboBox.TabIndex = 0;
+            this.projektComboBox.SelectedIndexChanged += new System.EventHandler(this.ProjektComboBox_SelectedIndexChanged);
             // 
             // backgrdDBWorker
             // 
@@ -708,7 +709,7 @@
         private System.Windows.Forms.Label projektTitelLbl;
         private System.Windows.Forms.TextBox Ort;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox Koordinator;
+        private System.Windows.Forms.TextBox koordinator;
         private System.Windows.Forms.Label KoordinatorLbl;
         private System.Windows.Forms.Label contractNameLbl;
         private System.Windows.Forms.TextBox contractName;

@@ -1,6 +1,7 @@
 ﻿using ContractApplikation.Src.Helper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Reflection;
 using System.Windows.Forms;
@@ -83,6 +84,22 @@ namespace ContractApplikation.Src.Model
             this.Disponent = dataReader.GetValue(9).ToString();
             this.ProjektTitel = dataReader.GetValue(7).ToString();
             this.ProjektBeschreibung = dataReader.GetValue(10).ToString();
+        }
+
+
+        public Projekt(DataRow dataRow)
+        {
+            this.Projektnummer = dataRow["Projektnummer"].ToString();
+            this.StartDatum = dataRow["StartDatum"].ToString();
+            this.EndDatum = dataRow["EndDatum"].ToString();
+            this.AnsprechpartnerID = Int32.Parse(dataRow["AnsprechpartnerID"].ToString());
+            this.AnzahlStunden = Int32.Parse(dataRow["AnzahlStunden"].ToString());
+            this.Verrechnungssatz = Int32.Parse(dataRow["Verrechnungssatz"].ToString());
+            this.Koordinator = dataRow["Koordinator"].ToString();
+            this.Gesprächsperson = dataRow["Gesprächsperson"].ToString();
+            this.Disponent = dataRow["Disponent"].ToString();
+            this.ProjektTitel = dataRow["ProjektTitel"].ToString();
+            this.ProjektBeschreibung = dataRow["ProjektBeschreibung"].ToString();
         }
     }
 }
