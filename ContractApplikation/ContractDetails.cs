@@ -129,11 +129,20 @@ namespace ContractApplikation
             }
         }
 
+        private string RemoveTimeFromDateString(string dateString)
+        {
+            string finalString = dateString;
+            if (dateString.Contains(" "))
+                finalString = dateString.Substring(0, dateString.IndexOf(' '));
+
+            return finalString;
+        }
+
         private Projekt GenerateProjectWithControl(Control.ControlCollection controlsForProjectTabPage)
         {
             List<TextBox> textboxes = ListOfTextBoxFromControlCollection(controlsForProjectTabPage);
-            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("startDatum",   startDatumDtPikr.Value.ToString()));
-            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("endDatum", endDatumDtPikr.Value.ToString()));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("startDatum", RemoveTimeFromDateString(startDatumDtPikr.Value.ToString())));
+            textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("endDatum", RemoveTimeFromDateString(endDatumDtPikr.Value.ToString())));
             textboxes.Add(Utilities.GenerateTextBoxWithNameAndValue("ansprechpartnerID", ansprechpartnerComboBox.SelectedIndex.ToString()));
             return new Projekt(textboxes);
         }
@@ -230,7 +239,7 @@ namespace ContractApplikation
         {
             Projekt proj            = model.ProjektForIndex(projektComboBox.SelectedIndex);
             Ansprechpartner kunden  = model.CustomerForIndex(proj.AnsprechpartnerID);
-            DocumentManager.GenerateContractDocument("New.docx", kunden, proj);
+            DocumentManager.GenerateContractDocument(contractName.Text + ".docx", kunden, proj);
         }
 
     }
