@@ -51,7 +51,7 @@ namespace ContractApplikation.Src.Model
 
         public Ansprechpartner(List<TextBox> listOfTextboxes, Salutation bezeichnung)
         {
-            this.Anrede = bezeichnung.ToString();
+            this.Anrede = Utilities.FirstLetterToUpperCase(bezeichnung.ToString().ToLower());
 
             foreach (TextBox textBox in listOfTextboxes)
             {
