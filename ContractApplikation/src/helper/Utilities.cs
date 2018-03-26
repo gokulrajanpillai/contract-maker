@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Windows.Forms;
 
 namespace ContractApplikation.Src.Helper
@@ -22,6 +23,13 @@ namespace ContractApplikation.Src.Helper
             newTextBox.Text = value;
             return newTextBox;
         }
+
+
+        public static decimal RoundByTwoDecimalPlaces(decimal value)
+        {
+            return decimal.Round(value, 2, MidpointRounding.AwayFromZero);
+        }
+
 
         public static string AddCurrencySymbol(string text)
         {

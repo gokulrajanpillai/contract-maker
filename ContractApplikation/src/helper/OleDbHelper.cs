@@ -63,8 +63,8 @@ namespace ContractApplikation.Src.Helper
                 cmd.Parameters.Add("@StartDatum", OleDbType.VarChar).Value          = project.StartDatum;
                 cmd.Parameters.Add("@EndDatum", OleDbType.VarChar).Value            = project.EndDatum;
                 cmd.Parameters.Add("@AnsprechpartnerID", OleDbType.Integer).Value   = project.AnsprechpartnerID;
-                cmd.Parameters.Add("@AnzahlStunden", OleDbType.Integer).Value       = project.AnzahlStunden;
-                cmd.Parameters.Add("@Verrechnungssatz", OleDbType.Integer).Value    = project.Verrechnungssatz;
+                cmd.Parameters.Add("@AnzahlStunden", OleDbType.VarChar).Value       = Utilities.RoundByTwoDecimalPlaces(project.AnzahlStunden).ToString();
+                cmd.Parameters.Add("@Verrechnungssatz", OleDbType.VarChar).Value    = Utilities.RoundByTwoDecimalPlaces(project.Verrechnungssatz).ToString();
                 cmd.Parameters.Add("@Koordinator", OleDbType.VarChar).Value         = project.Koordinator;
                 cmd.Parameters.Add("@Gesprächsperson", OleDbType.VarChar).Value     = project.Gesprächsperson;
                 cmd.Parameters.Add("@Disponent", OleDbType.VarChar).Value           = project.Disponent;

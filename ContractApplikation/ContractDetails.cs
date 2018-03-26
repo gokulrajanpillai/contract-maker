@@ -166,9 +166,12 @@ namespace ContractApplikation
         private void UpdateProjectComboBox()
         {
             projektComboBox.Items.Clear();
+            kost_projectComboBox.Items.Clear();
+
             foreach (Projekt proj in model.ProjectList)
             {
                 projektComboBox.Items.Add(new CustomComboBoxItem(proj.ProjektTitel, proj));
+                kost_projectComboBox.Items.Add(new CustomComboBoxItem(proj.ProjektTitel, proj));
             }
         }
 
@@ -244,8 +247,16 @@ namespace ContractApplikation
             DocumentManager.GenerateContractDocument(contractName.Text + ".docx", kunden, proj);
         }
 
+
+        private void EditProjectCostTable_Click(object sender, EventArgs e)
+        {
+            DocumentManager.EditCostTableForProject(model.ProjektForIndex(kost_projectComboBox.SelectedIndex));
+            // Class1.WordFromExcel(Constants.FileLocation.PROTOTYPE_COSTTABLE);
+        }
+
         #endregion
 
         #endregion
+
     }
 }

@@ -88,6 +88,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.projektComboBox = new System.Windows.Forms.ComboBox();
             this.backgrdDBWorker = new System.ComponentModel.BackgroundWorker();
+            this.kost_projectComboBox = new System.Windows.Forms.ComboBox();
+            this.kost_projektNameLbl = new System.Windows.Forms.Label();
+            this.editProjectCostTable = new System.Windows.Forms.Button();
             this.ContractGenerator.SuspendLayout();
             this.Ansprechpartner.SuspendLayout();
             this.Projekt.SuspendLayout();
@@ -576,6 +579,9 @@
             // 
             // ProjektkostenTabelle
             // 
+            this.ProjektkostenTabelle.Controls.Add(this.editProjectCostTable);
+            this.ProjektkostenTabelle.Controls.Add(this.kost_projektNameLbl);
+            this.ProjektkostenTabelle.Controls.Add(this.kost_projectComboBox);
             this.ProjektkostenTabelle.Controls.Add(this.excelBrowser);
             this.ProjektkostenTabelle.Location = new System.Drawing.Point(4, 22);
             this.ProjektkostenTabelle.Name = "ProjektkostenTabelle";
@@ -657,6 +663,34 @@
             this.backgrdDBWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgrdDBWorker_DoWork);
             this.backgrdDBWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgrdDBWorker_RunWorkerCompleted);
             // 
+            // kost_projectComboBox
+            // 
+            this.kost_projectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.kost_projectComboBox.FormattingEnabled = true;
+            this.kost_projectComboBox.Location = new System.Drawing.Point(427, 113);
+            this.kost_projectComboBox.Name = "kost_projectComboBox";
+            this.kost_projectComboBox.Size = new System.Drawing.Size(376, 21);
+            this.kost_projectComboBox.TabIndex = 1;
+            // 
+            // kost_projektNameLbl
+            // 
+            this.kost_projektNameLbl.AutoSize = true;
+            this.kost_projektNameLbl.Location = new System.Drawing.Point(168, 116);
+            this.kost_projektNameLbl.Name = "kost_projektNameLbl";
+            this.kost_projektNameLbl.Size = new System.Drawing.Size(66, 13);
+            this.kost_projektNameLbl.TabIndex = 2;
+            this.kost_projektNameLbl.Text = "Projektname";
+            // 
+            // editProjectCostTable
+            // 
+            this.editProjectCostTable.Location = new System.Drawing.Point(361, 208);
+            this.editProjectCostTable.Name = "editProjectCostTable";
+            this.editProjectCostTable.Size = new System.Drawing.Size(222, 23);
+            this.editProjectCostTable.TabIndex = 3;
+            this.editProjectCostTable.Text = "Edit Project Cost Table";
+            this.editProjectCostTable.UseVisualStyleBackColor = true;
+            this.editProjectCostTable.Click += new System.EventHandler(this.EditProjectCostTable_Click);
+            // 
             // ContractDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -672,6 +706,7 @@
             this.Projekt.ResumeLayout(false);
             this.Projekt.PerformLayout();
             this.ProjektkostenTabelle.ResumeLayout(false);
+            this.ProjektkostenTabelle.PerformLayout();
             this.Angebot.ResumeLayout(false);
             this.Angebot.PerformLayout();
             this.ResumeLayout(false);
@@ -740,6 +775,9 @@
         private System.Windows.Forms.TextBox contractName;
         private System.Windows.Forms.TabPage ProjektkostenTabelle;
         private System.Windows.Forms.WebBrowser excelBrowser;
+        private System.Windows.Forms.Button editProjectCostTable;
+        private System.Windows.Forms.Label kost_projektNameLbl;
+        private System.Windows.Forms.ComboBox kost_projectComboBox;
     }
 }
 

@@ -5,6 +5,7 @@ using Spire.Doc;
 using Spire.Doc.Documents;
 using Spire.Doc.Fields;
 using Spire.Xls;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -13,7 +14,7 @@ namespace ContractApplikation.Src.Controller
 {
     public class DocumentManager
     {
-        public static bool includeCostTable  = true;
+        public static bool includeCostTable = true;
 
         private static readonly Spire.Doc.FileFormat DocumentFormat = Spire.Doc.FileFormat.Docx;
 
@@ -71,18 +72,18 @@ namespace ContractApplikation.Src.Controller
             Document doc = LoadDocument(PrototypeDocumentPath());
             ReplaceCustomerPlaceholders(ref doc, Kunden);
             ReplaceProjektPlaceholders(ref doc, Projekt);
-            AddProjectCostTable(ref doc);
+            AddProjectCostTable(ref doc, Projekt);
 
             SaveDocument(doc, NameOfDocument);
             MessageBox.Show("File processed and saved successfully");
             OpenDocument(NameOfDocument);
         }
 
-        private static void AddProjectCostTable(ref Document doc)
+        private static void AddProjectCostTable(ref Document doc, Projekt projekt)
         {
             // Load the workbook in the WebBrowser control
             Workbook workbook = new Workbook();
-            workbook.LoadFromFile(Constants.FileLocation.PROTOTYPE_COSTTABLE);
+            workbook.LoadFromFile(Constants.FileLocation.OutputFilePath(projekt.CostTableFileName));
             Worksheet sheet = workbook.Worksheets[0];
 
             Section section = doc.Sections[0];
@@ -102,8 +103,10 @@ namespace ContractApplikation.Src.Controller
                 {
                     CellRange xCell = sheet.Range[r, c];
                     TableCell wCell = table.Rows[r - 1].Cells[c - 1];
+
                     //Fill data to Word table 
                     TextRange textRange = wCell.AddParagraph().AppendText(xCell.NumberText);
+
                     //Copy the formatting of table to Word 
                     CopyStyle(textRange, xCell, wCell);
 
@@ -132,8 +135,10 @@ namespace ContractApplikation.Src.Controller
             wTextRange.CharacterFormat.FontName = xCell.Style.Font.FontName;
             wTextRange.CharacterFormat.Bold = xCell.Style.Font.IsBold;
             wTextRange.CharacterFormat.Italic = xCell.Style.Font.IsItalic;
+
             //Copy backcolor 
             wCell.CellFormat.BackColor = xCell.Style.Color;
+
             //Copy text alignment 
             switch (xCell.HorizontalAlignment)
             {
@@ -149,6 +154,11 @@ namespace ContractApplikation.Src.Controller
             }
         }
 
+        private static bool FileExistsInOutputDirectory(string NameOfDocument)
+        {
+            return File.Exists(Constants.FileLocation.OutputFilePath(NameOfDocument));
+        }
+
         private static void OpenDocument(string NameOfDocument)
         {
             Process.Start(Constants.FileLocation.OutputFilePath(NameOfDocument));
@@ -157,9 +167,10 @@ namespace ContractApplikation.Src.Controller
         private static void ReplaceCustomerPlaceholders(ref Document doc, Ansprechpartner kunden)
         {
             doc.Replace("[Kunden_Anrede]", kunden.Anrede, true, false);
+
             doc.Replace("[Kunden_Vorname]", kunden.Vorname, true, false);
-            doc.Replace("[Kunden_Nachname]", kunden.Nachname, true, false);
             doc.Replace("[Kunden_Vollname]", kunden.Name, true, false);
+            doc.Replace("[Kunden_Nachname]", kunden.Nachname, true, false);
             doc.Replace("[Kunden_Firma]", kunden.Firma, true, false);
             doc.Replace("[Kunden_Geschäftsbereich]", kunden.Geschäftsbereich, true, false);
             doc.Replace("[Kunden_Abteilungszusatz]", kunden.Abteilungszusatz, true, false);
@@ -189,6 +200,24 @@ namespace ContractApplikation.Src.Controller
             doc.Replace("[Projekt_Gesprächsperson]", project.Gesprächsperson, true, false);
             doc.Replace("[Projekt_Disponent]", project.Disponent, true, false);
             doc.Replace("[Projekt_ProjektBeschreibung]", project.ProjektBeschreibung, true, false);
+        }
+
+        internal static void EditCostTableForProject(Projekt projekt)
+        {
+            // Copy file from prototype, if it does not exist
+            if (!FileExistsInOutputDirectory(projekt.CostTableFileName))
+                File.Copy(Constants.FileLocation.PROTOTYPE_COSTTABLE, Constants.FileLocation.OutputFilePath(projekt.CostTableFileName));
+            OpenDocument(projekt.CostTableFileName);
+        }
+
+        private static void CopyExcelFile(string sourcePath, string destinationPath)
+        {
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile(sourcePath);
+            
+            workbook.SaveToFile(destinationPath, ExcelVersion.Version97to2003);
+            System.Diagnostics.Process.Start(destinationPath);
+
         }
     }
 }

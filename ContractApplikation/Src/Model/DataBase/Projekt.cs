@@ -18,9 +18,9 @@ namespace ContractApplikation.Src.Model
 
         public Int32 AnsprechpartnerID { get; private set; }
 
-        public Int32 AnzahlStunden { get; private set; }
+        public Decimal AnzahlStunden { get; private set; }
 
-        public Int32 Verrechnungssatz { get; private set; }
+        public Decimal Verrechnungssatz { get; private set; }
 
         public String ProjektTitel { get; private set; }
 
@@ -38,7 +38,7 @@ namespace ContractApplikation.Src.Model
             get
             {
                 decimal payment = Verrechnungssatz;
-                return Utilities.AddCurrencySymbol(decimal.Round(payment, 2, MidpointRounding.AwayFromZero).ToString());
+                return Utilities.AddCurrencySymbol(Utilities.RoundByTwoDecimalPlaces(payment).ToString());
             }
         }
 
@@ -50,9 +50,19 @@ namespace ContractApplikation.Src.Model
                 decimal hours = AnzahlStunden;
                 decimal payment = Verrechnungssatz;
                 decimal sum = hours * payment;
-                return Utilities.AddCurrencySymbol(decimal.Round(sum, 2, MidpointRounding.AwayFromZero).ToString());
+                return Utilities.AddCurrencySymbol(Utilities.RoundByTwoDecimalPlaces(sum).ToString());
             }
         }
+
+        // Custom property: not part of the database
+        public String CostTableFileName
+        {
+            get
+            {
+                return "kostTabelle_" + ProjektTitel + ".xlsx";
+            }
+        }
+        
 
         public Projekt(List<TextBox> listOfTextboxes)
         {
@@ -64,6 +74,10 @@ namespace ContractApplikation.Src.Model
                 {
                     property.SetValue(this, int.Parse(textBox.Text));
                 }
+                else if (property.PropertyType == typeof(decimal))
+                {
+                    property.SetValue(this, decimal.Parse(textBox.Text));
+                }
                 else
                 {
                     property.SetValue(this, textBox.Text);
@@ -71,30 +85,14 @@ namespace ContractApplikation.Src.Model
             }
         }
 
-        public Projekt(OleDbDataReader dataReader)
-        {
-            this.Projektnummer = dataReader.GetValue(1).ToString();
-            this.StartDatum = dataReader.GetValue(2).ToString();
-            this.EndDatum = dataReader.GetValue(3).ToString();
-            this.AnsprechpartnerID = dataReader.GetInt32(4);
-            this.AnzahlStunden = dataReader.GetInt32(5);
-            this.Verrechnungssatz = dataReader.GetInt32(6);
-            this.Koordinator = dataReader.GetValue(11).ToString();
-            this.Gesprächsperson = dataReader.GetValue(8).ToString();
-            this.Disponent = dataReader.GetValue(9).ToString();
-            this.ProjektTitel = dataReader.GetValue(7).ToString();
-            this.ProjektBeschreibung = dataReader.GetValue(10).ToString();
-        }
-
-
         public Projekt(DataRow dataRow)
         {
             this.Projektnummer = dataRow["Projektnummer"].ToString();
             this.StartDatum = dataRow["StartDatum"].ToString();
             this.EndDatum = dataRow["EndDatum"].ToString();
             this.AnsprechpartnerID = Int32.Parse(dataRow["AnsprechpartnerID"].ToString());
-            this.AnzahlStunden = Int32.Parse(dataRow["AnzahlStunden"].ToString());
-            this.Verrechnungssatz = Int32.Parse(dataRow["Verrechnungssatz"].ToString());
+            this.AnzahlStunden = Decimal.Parse(dataRow["AnzahlStunden"].ToString());
+            this.Verrechnungssatz = Decimal.Parse(dataRow["Verrechnungssatz"].ToString());
             this.Koordinator = dataRow["Koordinator"].ToString();
             this.Gesprächsperson = dataRow["Gesprächsperson"].ToString();
             this.Disponent = dataRow["Disponent"].ToString();
