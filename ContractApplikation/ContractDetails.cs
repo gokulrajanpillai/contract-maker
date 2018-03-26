@@ -71,6 +71,22 @@ namespace ContractApplikation
             {
                 MessageBox.Show("Wähle ein Geschlecht aus");
             }
+            else if (!Validation.IsValidEmail(email.Text))
+            {
+                MessageBox.Show("Geben sie eine gültige E-Mail-Adresse an");
+            }
+            else if (!Validation.IsValidPhoneNumber(telefon.Text))
+            {
+                MessageBox.Show("Geben sie eine gültige Telefonnummer an");
+            }
+            else if (!Validation.IsValidPhoneNumber(telefon.Text))
+            {
+                MessageBox.Show("Geben sie eine gültige Telefonnummer an");
+            }
+            else if (!Validation.IsWholeNumber(PLZ.Text))
+            {
+                MessageBox.Show("PLZ muss Nummer sein");
+            }
             else
             {
                 return true;
@@ -198,18 +214,6 @@ namespace ContractApplikation
         }
         #endregion
 
-        #region TabPage Selection
-        private void TabPage_Selected(object sender, TabControlEventArgs e)
-        {
-            if ((sender as TabControl).SelectedTab.Name.Equals("ProjektkostenTabelle"))
-            {
-                
-            }
-        }
-
-        
-        #endregion
-
         #region Button Click Events
 
         private void CreateCustomerButtonClicked(object sender, EventArgs e)
@@ -258,5 +262,33 @@ namespace ContractApplikation
 
         #endregion
 
+        private void Text_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            TextBox tb = (sender as TextBox);
+            if (!contentIsValid(tb))
+            {
+                MessageBox.Show("Geben Sie einen gültigen Wert für " + Utilities.FirstLetterToUpperCase(tb.Name));
+                tb.Text = "";
+                e.Cancel = true;
+            }
+        }
+
+        private bool contentIsValid(TextBox tb)
+        {
+            if (tb.Name.ToLower() == "email")
+                return Validation.IsValidEmail(tb.Text);
+            else if (tb.Name.ToLower() == "telefon")
+                return Validation.IsValidPhoneNumber(tb.Text);
+            else if (tb.Name.ToLower() == "vorname" || tb.Name.ToLower() == "nachname" || tb.Name.ToLower() == "disponent" || tb.Name.ToLower() == "koordinator" || tb.Name.ToLower() == "gesprächsperson")
+                return Validation.IsName(tb.Text);
+            else if (tb.Name.ToLower() == "anzahlstunden")
+                return Validation.IsWholeNumber(tb.Text);
+            else if (tb.Name.ToLower() == "plz")
+                return Validation.IsZipCode(tb.Text);
+            else if (tb.Name.ToLower() == "verrechnungssatz")
+                return Validation.IsDecimalNumber(tb.Text);
+            else
+                return false;
+        }
     }
 }

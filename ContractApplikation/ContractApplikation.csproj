@@ -133,6 +133,7 @@
   <ItemGroup>
     <Compile Include="Src\Controller\Class1.cs" />
     <Compile Include="Src\Controller\DocumentManager.cs" />
+    <Compile Include="Src\Helper\Validation.cs" />
     <Compile Include="Src\Helper\Constants.cs" />
     <Compile Include="Src\Helper\CustomComboBoxItem.cs" />
     <Compile Include="Src\Helper\OleDbHelper.cs" />

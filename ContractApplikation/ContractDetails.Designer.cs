@@ -80,6 +80,9 @@
             this.projektnummer = new System.Windows.Forms.TextBox();
             this.projektnummerLbl = new System.Windows.Forms.Label();
             this.ProjektkostenTabelle = new System.Windows.Forms.TabPage();
+            this.editProjectCostTable = new System.Windows.Forms.Button();
+            this.kost_projektNameLbl = new System.Windows.Forms.Label();
+            this.kost_projectComboBox = new System.Windows.Forms.ComboBox();
             this.excelBrowser = new System.Windows.Forms.WebBrowser();
             this.Angebot = new System.Windows.Forms.TabPage();
             this.contractNameLbl = new System.Windows.Forms.Label();
@@ -88,9 +91,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.projektComboBox = new System.Windows.Forms.ComboBox();
             this.backgrdDBWorker = new System.ComponentModel.BackgroundWorker();
-            this.kost_projectComboBox = new System.Windows.Forms.ComboBox();
-            this.kost_projektNameLbl = new System.Windows.Forms.Label();
-            this.editProjectCostTable = new System.Windows.Forms.Button();
             this.ContractGenerator.SuspendLayout();
             this.Ansprechpartner.SuspendLayout();
             this.Projekt.SuspendLayout();
@@ -109,7 +109,6 @@
             this.ContractGenerator.SelectedIndex = 0;
             this.ContractGenerator.Size = new System.Drawing.Size(955, 523);
             this.ContractGenerator.TabIndex = 0;
-            this.ContractGenerator.Selected += new System.Windows.Forms.TabControlEventHandler(this.TabPage_Selected);
             // 
             // Ansprechpartner
             // 
@@ -178,6 +177,7 @@
             this.PLZ.Name = "PLZ";
             this.PLZ.Size = new System.Drawing.Size(60, 20);
             this.PLZ.TabIndex = 21;
+            this.PLZ.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // ortLbl
             // 
@@ -274,6 +274,7 @@
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(212, 20);
             this.email.TabIndex = 9;
+            this.email.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // emailLbl
             // 
@@ -290,6 +291,7 @@
             this.telefon.Name = "telefon";
             this.telefon.Size = new System.Drawing.Size(212, 20);
             this.telefon.TabIndex = 7;
+            this.telefon.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // telefonLbl
             // 
@@ -306,6 +308,7 @@
             this.nachname.Name = "nachname";
             this.nachname.Size = new System.Drawing.Size(212, 20);
             this.nachname.TabIndex = 5;
+            this.nachname.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // nachnameLbl
             // 
@@ -322,6 +325,7 @@
             this.vorname.Name = "vorname";
             this.vorname.Size = new System.Drawing.Size(212, 20);
             this.vorname.TabIndex = 3;
+            this.vorname.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // vornameLbl
             // 
@@ -393,6 +397,7 @@
             this.koordinator.Name = "koordinator";
             this.koordinator.Size = new System.Drawing.Size(200, 20);
             this.koordinator.TabIndex = 27;
+            this.koordinator.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // KoordinatorLbl
             // 
@@ -453,6 +458,7 @@
             this.disponent.Name = "disponent";
             this.disponent.Size = new System.Drawing.Size(317, 20);
             this.disponent.TabIndex = 16;
+            this.disponent.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // gesprächsperson
             // 
@@ -460,6 +466,7 @@
             this.gesprächsperson.Name = "gesprächsperson";
             this.gesprächsperson.Size = new System.Drawing.Size(317, 20);
             this.gesprächsperson.TabIndex = 15;
+            this.gesprächsperson.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // verrechnungssatz
             // 
@@ -467,6 +474,7 @@
             this.verrechnungssatz.Name = "verrechnungssatz";
             this.verrechnungssatz.Size = new System.Drawing.Size(200, 20);
             this.verrechnungssatz.TabIndex = 14;
+            this.verrechnungssatz.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // anzahlStunden
             // 
@@ -474,6 +482,7 @@
             this.anzahlStunden.Name = "anzahlStunden";
             this.anzahlStunden.Size = new System.Drawing.Size(200, 20);
             this.anzahlStunden.TabIndex = 13;
+            this.anzahlStunden.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
             // endDatumDtPikr
             // 
@@ -590,6 +599,34 @@
             this.ProjektkostenTabelle.Text = "Projektkosten Tabelle";
             this.ProjektkostenTabelle.UseVisualStyleBackColor = true;
             // 
+            // editProjectCostTable
+            // 
+            this.editProjectCostTable.Location = new System.Drawing.Point(361, 208);
+            this.editProjectCostTable.Name = "editProjectCostTable";
+            this.editProjectCostTable.Size = new System.Drawing.Size(222, 23);
+            this.editProjectCostTable.TabIndex = 3;
+            this.editProjectCostTable.Text = "Edit Project Cost Table";
+            this.editProjectCostTable.UseVisualStyleBackColor = true;
+            this.editProjectCostTable.Click += new System.EventHandler(this.EditProjectCostTable_Click);
+            // 
+            // kost_projektNameLbl
+            // 
+            this.kost_projektNameLbl.AutoSize = true;
+            this.kost_projektNameLbl.Location = new System.Drawing.Point(168, 116);
+            this.kost_projektNameLbl.Name = "kost_projektNameLbl";
+            this.kost_projektNameLbl.Size = new System.Drawing.Size(66, 13);
+            this.kost_projektNameLbl.TabIndex = 2;
+            this.kost_projektNameLbl.Text = "Projektname";
+            // 
+            // kost_projectComboBox
+            // 
+            this.kost_projectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.kost_projectComboBox.FormattingEnabled = true;
+            this.kost_projectComboBox.Location = new System.Drawing.Point(427, 113);
+            this.kost_projectComboBox.Name = "kost_projectComboBox";
+            this.kost_projectComboBox.Size = new System.Drawing.Size(376, 21);
+            this.kost_projectComboBox.TabIndex = 1;
+            // 
             // excelBrowser
             // 
             this.excelBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -662,34 +699,6 @@
             // 
             this.backgrdDBWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgrdDBWorker_DoWork);
             this.backgrdDBWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgrdDBWorker_RunWorkerCompleted);
-            // 
-            // kost_projectComboBox
-            // 
-            this.kost_projectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.kost_projectComboBox.FormattingEnabled = true;
-            this.kost_projectComboBox.Location = new System.Drawing.Point(427, 113);
-            this.kost_projectComboBox.Name = "kost_projectComboBox";
-            this.kost_projectComboBox.Size = new System.Drawing.Size(376, 21);
-            this.kost_projectComboBox.TabIndex = 1;
-            // 
-            // kost_projektNameLbl
-            // 
-            this.kost_projektNameLbl.AutoSize = true;
-            this.kost_projektNameLbl.Location = new System.Drawing.Point(168, 116);
-            this.kost_projektNameLbl.Name = "kost_projektNameLbl";
-            this.kost_projektNameLbl.Size = new System.Drawing.Size(66, 13);
-            this.kost_projektNameLbl.TabIndex = 2;
-            this.kost_projektNameLbl.Text = "Projektname";
-            // 
-            // editProjectCostTable
-            // 
-            this.editProjectCostTable.Location = new System.Drawing.Point(361, 208);
-            this.editProjectCostTable.Name = "editProjectCostTable";
-            this.editProjectCostTable.Size = new System.Drawing.Size(222, 23);
-            this.editProjectCostTable.TabIndex = 3;
-            this.editProjectCostTable.Text = "Edit Project Cost Table";
-            this.editProjectCostTable.UseVisualStyleBackColor = true;
-            this.editProjectCostTable.Click += new System.EventHandler(this.EditProjectCostTable_Click);
             // 
             // ContractDetails
             // 
