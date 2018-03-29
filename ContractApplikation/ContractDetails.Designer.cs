@@ -87,7 +87,7 @@
             this.Angebot = new System.Windows.Forms.TabPage();
             this.contractNameLbl = new System.Windows.Forms.Label();
             this.contractName = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.contractGeneratorBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.projektComboBox = new System.Windows.Forms.ComboBox();
             this.backgrdDBWorker = new System.ComponentModel.BackgroundWorker();
@@ -601,6 +601,7 @@
             // 
             // editProjectCostTable
             // 
+            this.editProjectCostTable.Enabled = false;
             this.editProjectCostTable.Location = new System.Drawing.Point(361, 208);
             this.editProjectCostTable.Name = "editProjectCostTable";
             this.editProjectCostTable.Size = new System.Drawing.Size(222, 23);
@@ -626,6 +627,7 @@
             this.kost_projectComboBox.Name = "kost_projectComboBox";
             this.kost_projectComboBox.Size = new System.Drawing.Size(376, 21);
             this.kost_projectComboBox.TabIndex = 1;
+            this.kost_projectComboBox.SelectedIndexChanged += new System.EventHandler(this.kost_projectComboBox_SelectedIndexChanged);
             // 
             // excelBrowser
             // 
@@ -640,7 +642,7 @@
             // 
             this.Angebot.Controls.Add(this.contractNameLbl);
             this.Angebot.Controls.Add(this.contractName);
-            this.Angebot.Controls.Add(this.button1);
+            this.Angebot.Controls.Add(this.contractGeneratorBtn);
             this.Angebot.Controls.Add(this.label1);
             this.Angebot.Controls.Add(this.projektComboBox);
             this.Angebot.Location = new System.Drawing.Point(4, 22);
@@ -665,16 +667,18 @@
             this.contractName.Name = "contractName";
             this.contractName.Size = new System.Drawing.Size(469, 20);
             this.contractName.TabIndex = 3;
+            this.contractName.Validating += new System.ComponentModel.CancelEventHandler(this.Text_Validating);
             // 
-            // button1
+            // contractGeneratorBtn
             // 
-            this.button1.Location = new System.Drawing.Point(309, 238);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(314, 45);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Angebot generieren";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.CreateContractButtonClicked);
+            this.contractGeneratorBtn.Enabled = false;
+            this.contractGeneratorBtn.Location = new System.Drawing.Point(309, 238);
+            this.contractGeneratorBtn.Name = "contractGeneratorBtn";
+            this.contractGeneratorBtn.Size = new System.Drawing.Size(314, 45);
+            this.contractGeneratorBtn.TabIndex = 2;
+            this.contractGeneratorBtn.Text = "Angebot generieren";
+            this.contractGeneratorBtn.UseVisualStyleBackColor = true;
+            this.contractGeneratorBtn.Click += new System.EventHandler(this.CreateContractButtonClicked);
             // 
             // label1
             // 
@@ -771,7 +775,7 @@
         private System.Windows.Forms.DateTimePicker startDatumDtPikr;
         private System.Windows.Forms.Button createProjectBtn;
         private System.ComponentModel.BackgroundWorker backgrdDBWorker;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button contractGeneratorBtn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox projektComboBox;
         private System.Windows.Forms.TextBox projektTitel;

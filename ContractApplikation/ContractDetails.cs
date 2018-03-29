@@ -209,6 +209,7 @@ namespace ContractApplikation
         #region Project Combobox Selection
         private void ProjektComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            contractGeneratorBtn.Enabled = true;
             Projekt proj        = model.ProjektForIndex(projektComboBox.SelectedIndex);
             contractName.Text   = proj.ProjektTitel;
         }
@@ -265,7 +266,7 @@ namespace ContractApplikation
         private void Text_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             TextBox tb = (sender as TextBox);
-            if (!contentIsValid(tb))
+            if (!ContentIsValid(tb))
             {
                 MessageBox.Show("Geben Sie einen gültigen Wert für " + Utilities.FirstLetterToUpperCase(tb.Name));
                 tb.Text = "";
@@ -273,7 +274,7 @@ namespace ContractApplikation
             }
         }
 
-        private bool contentIsValid(TextBox tb)
+        private bool ContentIsValid(TextBox tb)
         {
             if (tb.Name.ToLower() == "email")
                 return Validation.IsValidEmail(tb.Text);
@@ -287,8 +288,15 @@ namespace ContractApplikation
                 return Validation.IsZipCode(tb.Text);
             else if (tb.Name.ToLower() == "verrechnungssatz")
                 return Validation.IsDecimalNumber(tb.Text);
+            else if (tb.Name.ToLower() == "contractname")
+                return !String.IsNullOrWhiteSpace(tb.Name);
             else
                 return false;
+        }
+
+        private void kost_projectComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            editProjectCostTable.Enabled = true;
         }
     }
 }

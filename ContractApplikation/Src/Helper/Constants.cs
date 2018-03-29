@@ -24,9 +24,11 @@ namespace ContractApplikation.Src.Helper
 
             public static readonly string PROTOTYPE_COSTTABLE   = OutputFilePath("TabelleKosten.xlsx");
 
+            public static readonly string COSTTABLE_WORDDOC     = OutputFilePath("TabelleKostenWord.docx");
+
             public static string OutputFilePath(string filename)
             {
-                return PROJECT + FILE_PATH_FILLER + filename;
+                return PROJECT + filename;
             }
         }
     }

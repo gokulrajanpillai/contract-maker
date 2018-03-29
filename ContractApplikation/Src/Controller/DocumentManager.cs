@@ -45,11 +45,11 @@ namespace ContractApplikation.Src.Controller
             doc.SaveToFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\CreatedWordDocument.docx", DocumentFormat);
         }
 
+
         public static void DisplayDocumentWithName(string name)
         {
             DisplayDocumentWithPath(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\" + name);
         }
-
 
 
         public static void DisplayDocumentWithPath(string path)
@@ -69,61 +69,104 @@ namespace ContractApplikation.Src.Controller
 
         public static void GenerateContractDocument(string NameOfDocument, Ansprechpartner Kunden, Projekt Projekt)
         {
-            Document doc = LoadDocument(PrototypeDocumentPath());
-            ReplaceCustomerPlaceholders(ref doc, Kunden);
-            ReplaceProjektPlaceholders(ref doc, Projekt);
-            AddProjectCostTable(ref doc, Projekt);
+            Document mainDoc = LoadDocument(Constants.FileLocation.PROTOTYPE_CONTRACT);
 
-            SaveDocument(doc, NameOfDocument);
+            ReplaceCustomerPlaceholders(ref mainDoc, Kunden);
+            ReplaceProjektPlaceholders(ref mainDoc, Projekt);
+            AddProjectCostTable(ref mainDoc, Projekt);
+
+            SaveDocument(mainDoc, NameOfDocument);
             MessageBox.Show("File processed and saved successfully");
             OpenDocument(NameOfDocument);
         }
 
-        private static void AddProjectCostTable(ref Document doc, Projekt projekt)
-        {
-            // Load the workbook in the WebBrowser control
-            Workbook workbook = new Workbook();
-            workbook.LoadFromFile(Constants.FileLocation.OutputFilePath(projekt.CostTableFileName));
-            Worksheet sheet = workbook.Worksheets[0];
+        #region New method for adding table into word
 
-            Section section = doc.Sections[0];
-            TextSelection selection = doc.FindString("[Projekt_TabelleKosten]", true, true);
+        private static void AddProjectCostTableFromWord(ref Document mainDoc, Projekt projekt)
+        {
+            GenerateWordDocumentFromExcel(projekt);
+            ReplaceTablePlaceholderWithTable(mainDoc);
+        }
+
+        private static void ReplaceTablePlaceholderWithTable(Document mainDoc)
+        {
+            Document tableDoc = LoadDocument(Constants.FileLocation.COSTTABLE_WORDDOC);
+            Section sec = tableDoc.Sections[0];
+            Table table = (sec.Tables[0] as Table).Clone();
+            Section section = mainDoc.Sections[0];
+            TextSelection selection = mainDoc.FindString("[Projekt_TabelleKosten]", true, true);
             TextRange range = selection.GetAsOneRange();
             Paragraph paragraph = range.OwnerParagraph;
             Body body = paragraph.OwnerTextBody;
+            
             int index = body.ChildObjects.IndexOf(paragraph);
-
-            Table table = section.AddTable(true);
-            table.ResetCells(sheet.LastRow, sheet.LastColumn);
-
-            //Traverse the rows and columns of table in worksheet and get the cells, call a custom function CopyStyle() to copy the font style and cell style from Excel to Word table. 
-            for (int r = 1; r <= sheet.LastRow; r++)
-            {
-                for (int c = 1; c <= sheet.LastColumn; c++)
-                {
-                    CellRange xCell = sheet.Range[r, c];
-                    TableCell wCell = table.Rows[r - 1].Cells[c - 1];
-
-                    //Fill data to Word table 
-                    TextRange textRange = wCell.AddParagraph().AppendText(xCell.NumberText);
-
-                    //Copy the formatting of table to Word 
-                    CopyStyle(textRange, xCell, wCell);
-
-                }
-            }
-            //Set column width of Word table in Word 
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                for (int j = 0; j < table.Rows[i].Cells.Count; j++)
-                {
-                    table.Rows[i].Cells[j].Width = 100f;
-                }
-            }
-            table.IndentFromLeft = paragraph.Format.LeftIndent;
-
             body.ChildObjects.Remove(paragraph);
             body.ChildObjects.Insert(index, table);
+        }
+
+        private static void GenerateWordDocumentFromExcel(Projekt projekt)
+        {
+            OfficeDocumentManager.WordFromExcel(Constants.FileLocation.OutputFilePath(projekt.CostTableFileName));
+        }
+
+        #endregion
+
+
+        #region Old method for adding table into word
+
+        private static void AddProjectCostTable(ref Document doc, Projekt projekt)
+        {
+            string projekt_kosttabelle = Constants.FileLocation.OutputFilePath(projekt.CostTableFileName);
+            if (File.Exists(projekt_kosttabelle))
+            {
+                // Load the workbook in the WebBrowser control
+                Workbook workbook = new Workbook();
+                workbook.LoadFromFile(projekt_kosttabelle);
+                Worksheet sheet = workbook.Worksheets[0];
+
+                Section section = doc.Sections[0];
+                TextSelection selection = doc.FindString("[Projekt_TabelleKosten]", true, true);
+                TextRange range = selection.GetAsOneRange();
+                Paragraph paragraph = range.OwnerParagraph;
+                Body body = paragraph.OwnerTextBody;
+                int index = body.ChildObjects.IndexOf(paragraph);
+
+                Table table = section.AddTable(true);
+                table.ResetCells(sheet.LastRow, sheet.LastColumn);
+
+                //Traverse the rows and columns of table in worksheet and get the cells, call a custom function CopyStyle() to copy the font style and cell style from Excel to Word table. 
+                for (int r = 1; r <= sheet.LastRow; r++)
+                {
+                    for (int c = 1; c <= sheet.LastColumn; c++)
+                    {
+                        CellRange xCell = sheet.Range[r, c];
+                        TableCell wCell = table.Rows[r - 1].Cells[c - 1];
+
+                        //Fill data to Word table 
+                        TextRange textRange = wCell.AddParagraph().AppendText(xCell.NumberText);
+
+                        //Copy the formatting of table to Word 
+                        CopyStyle(textRange, xCell, wCell);
+
+                    }
+                }
+
+                //Set column width of Word table in Word 
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    for (int j = 0; j < table.Rows[i].Cells.Count; j++)
+                    {
+                        table.Rows[i].Cells[j].Width = 100f;
+                    }
+                }
+                table.IndentFromLeft = paragraph.Format.LeftIndent;
+                body.ChildObjects.Remove(paragraph);
+                body.ChildObjects.Insert(index, table);
+            }
+            else
+            {
+                MessageBox.Show("Es gibt kein KostenTabelle, für die ausgewählten Projekt");
+            }
         }
 
         //The custom function CopyStyle() is defined as below 
@@ -153,6 +196,7 @@ namespace ContractApplikation.Src.Controller
                     break;
             }
         }
+        #endregion
 
         private static bool FileExistsInOutputDirectory(string NameOfDocument)
         {
@@ -181,7 +225,6 @@ namespace ContractApplikation.Src.Controller
             doc.Replace("[Kunden_PLZ]", kunden.PLZ, true, false);
             doc.Replace("[Kunden_Ort]", kunden.Ort, true, false);
         }
-
 
         private static void ReplaceProjektPlaceholders(ref Document doc, Projekt project)
         {
@@ -216,8 +259,9 @@ namespace ContractApplikation.Src.Controller
             workbook.LoadFromFile(sourcePath);
             
             workbook.SaveToFile(destinationPath, ExcelVersion.Version97to2003);
-            System.Diagnostics.Process.Start(destinationPath);
+            Process.Start(destinationPath);
 
         }
+
     }
 }
